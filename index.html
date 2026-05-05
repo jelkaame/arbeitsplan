@@ -7,99 +7,99 @@
 <title>Arbeitsplan Manager v16.0</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0c0e14;--sf:#13161f;--sf2:#1b1f2e;--sf3:#222738;--bd:#2a2f45;--ac:#3d8ef0;--ac2:#a259ff;--gr:#29c78a;--or:#f5a623;--re:#f0506e;--ye:#ffd166;--te:#22d4c8;--tx:#e8eaf5;--tx2:#7a80a0;--tx3:#4a5070;--r:14px;--rs:9px;--sh:0 8px 32px rgba(0,0,0,.5);}
-[data-theme="light"]{--bg:#f4f5f7;--sf:#ffffff;--sf2:#f0f1f5;--sf3:#e8eaf0;--bd:#d0d4e8;--ac:#1a56db;--ac2:#7c3aed;--gr:#059669;--or:#d97706;--re:#dc2626;--ye:#d97706;--te:#0891b2;--tx:#1a1d2e;--tx2:#4a5070;--tx3:#7a80a0;--sh:0 4px 20px rgba(0,0,0,.1);}
+:root{--bg:#0f1117;--sf:#171b24;--sf2:#1e2330;--sf3:#252a38;--bd:#2c3244;--ac:#d4d8e4;--ac2:#8a9ab0;--gr:#3dba7c;--or:#c98a3a;--re:#c0434f;--ye:#b8962a;--te:#3a9e9e;--tx:#d4d8e4;--tx2:#6b7280;--tx3:#3d4455;--r:4px;--rs:3px;--sh:0 4px 24px rgba(0,0,0,.6);}
+[data-theme="light"]{--bg:#f7f7f5;--sf:#ffffff;--sf2:#f2f2ef;--sf3:#eaeae6;--bd:#d8d8d2;--ac:#1a1a1a;--ac2:#4a4a4a;--gr:#2a7a55;--or:#8a5e20;--re:#9a2b35;--ye:#7a6010;--te:#2a6e6e;--tx:#1a1a1a;--tx2:#6b6b60;--tx3:#a0a090;--sh:0 2px 12px rgba(0,0,0,.08);}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;}
-body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--tx);font-size:15px;line-height:1.5;overflow-x:hidden;}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--tx);font-size:15px;line-height:1.5;overflow-x:hidden;}
 
 /* WELCOME / OVERLAYS */
 .overlay{position:fixed;inset:0;background:var(--bg);z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow-y:auto;}
 .overlay.hidden{display:none!important;}
-.login-logo{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;text-align:center;}
+.login-logo{font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;text-align:center;}
 .login-sub{color:var(--tx2);font-size:12px;margin-bottom:20px;text-align:center;}
 .login-box{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:22px;width:100%;max-width:420px;}
 .ltabs{display:flex;gap:6px;margin-bottom:16px;}
 .ltab{flex:1;padding:9px;border-radius:var(--rs);border:1px solid var(--bd);background:var(--sf2);color:var(--tx2);font-size:12px;font-weight:700;cursor:pointer;text-align:center;transition:.18s;}
-.ltab.active{background:rgba(61,142,240,.15);border-color:var(--ac);color:var(--ac);}
+.ltab.active{background:var(--tx);color:var(--bg);border-color:var(--tx);}
 .acc-item{display:flex;align-items:center;justify-content:space-between;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 12px;cursor:pointer;margin-bottom:6px;transition:.18s;}
 .acc-item:hover{border-color:var(--ac);}
 #setupBox{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:22px;width:100%;max-width:420px;}
-.area-chip{background:var(--sf2);border:1px solid var(--bd);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:600;color:var(--tx2);cursor:pointer;transition:.18s;user-select:none;display:inline-block;}
-.area-chip.selected{background:rgba(61,142,240,.2);border-color:var(--ac);color:var(--ac);}
+.area-chip{background:var(--sf2);border:1px solid var(--bd);border-radius:3px;padding:6px 12px;font-size:12px;font-weight:600;color:var(--tx2);cursor:pointer;transition:.18s;user-select:none;display:inline-block;}
+.area-chip.selected{background:var(--tx);color:var(--bg);border-color:var(--tx);}
 
 /* WELCOME SCREEN */
 .welcome-box{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:22px;width:100%;max-width:480px;max-height:80vh;overflow-y:auto;}
 .welcome-feature{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd);}
 .welcome-feature:last-child{border-bottom:none;}
 .welcome-feature-icon{font-size:20px;flex-shrink:0;margin-top:2px;}
-.welcome-feature-text h4{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--tx);margin-bottom:2px;}
+.welcome-feature-text h4{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;color:var(--tx);margin-bottom:2px;}
 .welcome-feature-text p{font-size:11px;color:var(--tx2);line-height:1.5;}
 .warn-banner{background:rgba(240,80,110,.1);border:1px solid rgba(240,80,110,.3);border-radius:var(--rs);padding:12px 14px;margin:14px 0;font-size:12px;color:var(--re);line-height:1.6;}
 .info-banner{background:rgba(61,142,240,.1);border:1px solid rgba(61,142,240,.3);border-radius:var(--rs);padding:12px 14px;margin:14px 0;font-size:12px;color:var(--ac);line-height:1.6;}
 
 /* APP */
 #app{display:none;flex-direction:column;min-height:100vh;}
-.app-header{background:var(--sf);border-bottom:1px solid var(--bd);padding:8px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:8px;}
-.logo{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;}
+.app-header{background:var(--sf);border-bottom:1px solid var(--bd);padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:8px;}
+.logo{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;}
 .header-clock{display:flex;flex-direction:column;align-items:center;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:4px 10px;min-width:100px;}
-.clock-time{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--ac);letter-spacing:.05em;line-height:1;}
+.clock-time{font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:800;color:var(--tx);letter-spacing:.08em;line-height:1;font-weight:500;}
 .clock-date{font-size:9px;color:var(--tx2);font-weight:600;letter-spacing:.04em;margin-top:1px;}
 .btn-ghost{background:transparent;border:none;color:var(--tx2);font-size:17px;cursor:pointer;padding:4px 5px;}
 .huser{font-size:10px;color:var(--tx2);font-weight:600;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .nav-tabs{display:flex;overflow-x:auto;background:var(--sf);border-bottom:1px solid var(--bd);padding:0 12px;gap:2px;scrollbar-width:none;}
 .nav-tabs::-webkit-scrollbar{display:none;}
-.nav-tab{flex-shrink:0;padding:11px 12px;font-size:12px;font-weight:600;color:var(--tx2);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;transition:.2s;white-space:nowrap;font-family:'Nunito',sans-serif;}
-.nav-tab.active{color:var(--ac);border-bottom-color:var(--ac);}
-.content{flex:1;padding:16px 24px;max-width:1100px;margin:0 auto;width:100%;}
+.nav-tab{flex-shrink:0;padding:11px 12px;font-size:12px;font-weight:600;color:var(--tx2);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;transition:.2s;white-space:nowrap;font-family:'IBM Plex Sans',sans-serif;}
+.nav-tab.active{color:var(--tx);border-bottom-color:var(--tx);}
+.content{flex:1;padding:20px 20px 40px;max-width:1080px;margin:0 auto;width:100%;}
 .tab-panel{display:none;}
 .tab-panel.active{display:block;animation:fi .22s ease;}
 @keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
-.section-header{margin-bottom:14px;}
-.section-header h2{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:3px;}
-.section-header p{color:var(--tx2);font-size:12px;}
-.card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:14px;margin-bottom:10px;}
-.card-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;}
+.section-header{margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--bd);}
+.section-header h2{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;color:var(--tx);}
+.section-header p{color:var(--tx3);font-size:11px;font-family:'IBM Plex Mono',monospace;letter-spacing:.05em;text-transform:uppercase;}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:18px;margin-bottom:12px;}
+.card-title{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;border-left:2px solid var(--bd);padding-left:8px;}
 .stype-row{display:flex;gap:6px;margin-bottom:12px;}
 .stype-btn{flex:1;padding:10px 6px;border-radius:var(--rs);border:2px solid var(--bd);background:var(--sf2);color:var(--tx2);font-size:12px;font-weight:700;cursor:pointer;transition:.18s;text-align:center;}
-.stype-btn.af{border-color:var(--ye);background:rgba(255,209,102,.15);color:var(--ye);}
-.stype-btn.as{border-color:#f5a623;background:rgba(245,166,35,.15);color:#f5a623;}
-.stype-btn.an{border-color:var(--ac2);background:rgba(162,89,255,.15);color:var(--ac2);}
-.stype-btn.au{border-color:var(--re);background:rgba(240,80,110,.15);color:var(--re);}
+.stype-btn.af{border-color:var(--or);background:rgba(201,138,58,.1);color:var(--or);}
+.stype-btn.as{border-color:var(--ye);background:rgba(184,150,42,.1);color:var(--ye);}
+.stype-btn.an{border-color:var(--tx3);background:rgba(61,68,85,.2);color:var(--tx2);}
+.stype-btn.au{border-color:var(--re);background:rgba(192,67,79,.1);color:var(--re);}
 .fg{margin-bottom:10px;}
 .fg label{display:block;font-size:11px;font-weight:700;color:var(--tx2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em;}
 .fr{display:flex;gap:8px;}
 .fr .fg{flex:1;}
-input,select,textarea{width:100%;background:var(--sf2);border:1px solid var(--bd);color:var(--tx);padding:10px 12px;border-radius:var(--rs);font-size:14px;font-family:'Nunito',sans-serif;transition:border-color .2s;-webkit-appearance:none;}
+input,select,textarea{width:100%;background:var(--sf2);border:1px solid var(--bd);color:var(--tx);padding:10px 12px;border-radius:var(--rs);font-size:14px;font-family:'IBM Plex Sans',sans-serif;transition:border-color .2s;-webkit-appearance:none;}
 input:focus,select:focus{outline:none;border-color:var(--ac);}
 select option{background:var(--sf2);}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:12px 16px;border-radius:var(--rs);font-size:14px;font-weight:700;font-family:'Nunito',sans-serif;border:none;cursor:pointer;transition:.18s;width:100%;}
-.btn-p{background:var(--ac);color:#fff;}.btn-p:hover{background:#2d7ee0;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:12px 16px;border-radius:var(--rs);font-size:14px;font-weight:700;font-family:'IBM Plex Sans',sans-serif;border:none;cursor:pointer;transition:.18s;width:100%;}
+.btn-p{background:var(--tx);color:var(--bg);}.btn-p:hover{opacity:.85;}
 .btn-s{background:var(--gr);color:#06201a;}
 .btn-d{background:var(--re);color:#fff;font-size:12px;padding:7px 11px;width:auto;}
 .btn-o{background:transparent;border:1px solid var(--bd);color:var(--tx2);}
 .btn-o:hover{border-color:var(--ac);color:var(--ac);}
 .btn-sm{padding:8px 12px;font-size:12px;width:auto;}
 .btn-exp{background:rgba(41,199,138,.15);border:1px solid rgba(41,199,138,.4);color:var(--gr);}
-.btn-imp{background:rgba(61,142,240,.15);border:1px solid rgba(61,142,240,.4);color:var(--ac);}
-.btn-dl{background:rgba(162,89,255,.15);border:1px solid rgba(162,89,255,.4);color:var(--ac2);}
+.btn-imp{background:rgba(212,216,228,.05);border:1px solid var(--bd);color:var(--tx2);}
+.btn-dl{background:rgba(212,216,228,.05);border:1px solid var(--bd);color:var(--tx2);}
 .btn-pdf{background:linear-gradient(135deg,rgba(240,80,110,.2),rgba(245,166,35,.2));border:1px solid rgba(240,80,110,.5);color:#f0506e;font-size:14px;}
 .rbox{background:linear-gradient(135deg,rgba(61,142,240,.1),rgba(162,89,255,.1));border:1px solid rgba(61,142,240,.25);border-radius:var(--rs);padding:14px;margin-top:10px;text-align:center;}
-.rbox .rv{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:var(--ac);}
+.rbox .rv{font-family:'IBM Plex Mono',monospace;font-size:30px;font-weight:800;color:var(--ac);}
 .rbox .rl{font-size:12px;color:var(--tx2);margin-top:2px;}
 .rgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
 .ri{background:var(--sf2);border-radius:var(--rs);padding:12px;text-align:center;}
-.ri .v{font-family:'Syne',sans-serif;font-size:19px;font-weight:700;}
+.ri .v{font-family:'IBM Plex Mono',monospace;font-size:19px;font-weight:700;}
 .ri .l{font-size:10px;color:var(--tx2);margin-top:2px;text-transform:uppercase;letter-spacing:.04em;}
 .vg{color:var(--gr);}.vo{color:var(--or);}.vr{color:var(--re);}.vy{color:var(--ye);}.vb{color:var(--ac);}.vt{color:var(--te);}.vp{color:var(--ac2);}
 .lc{display:flex;flex-direction:column;gap:7px;margin-top:10px;}
-.li{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:11px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.li{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
 .li-info{flex:1;min-width:0;}
 .li-info .tt{font-weight:600;font-size:13px;flex-wrap:wrap;display:flex;align-items:center;gap:4px;}
 .li-info .st{font-size:11px;color:var(--tx2);margin-top:2px;}
-.badge{display:inline-block;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap;}
+.badge{display:inline-block;padding:2px 7px;border-radius:3px;font-size:10px;font-weight:700;white-space:nowrap;}
 .bb{background:rgba(61,142,240,.18);color:var(--ac);}
 .bg{background:rgba(41,199,138,.18);color:var(--gr);}
 .bo{background:rgba(245,166,35,.18);color:var(--or);}
@@ -107,13 +107,13 @@ select option{background:var(--sf2);}
 .by{background:rgba(255,209,102,.18);color:var(--ye);}
 .bt{background:rgba(34,212,200,.18);color:var(--te);}
 .bp{background:rgba(162,89,255,.18);color:var(--ac2);}
-.pb-wrap{background:var(--sf3);border-radius:20px;height:7px;overflow:hidden;margin-top:5px;}
-.pb{height:100%;border-radius:20px;transition:width .5s ease;}
+.pb-wrap{background:var(--sf3);border-radius:3px;height:7px;overflow:hidden;margin-top:5px;}
+.pb{height:100%;border-radius:3px;transition:width .5s ease;}
 .empty{text-align:center;padding:24px 14px;color:var(--tx2);font-size:12px;}
 .empty .icon{font-size:26px;margin-bottom:7px;}
 .mrow{display:flex;align-items:center;padding:9px 0;border-bottom:1px solid var(--bd);}
 .mrow:last-child{border-bottom:none;}
-.mavatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;flex-shrink:0;}
+.mavatar{width:34px;height:34px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;flex-shrink:0;}
 .minfo{flex:1;margin-left:10px;}
 .minfo .mn{font-weight:600;font-size:13px;}
 .minfo .mr{font-size:11px;color:var(--tx2);}
@@ -125,15 +125,15 @@ select option{background:var(--sf2);}
 .rtable th{color:var(--tx2);font-size:10px;text-transform:uppercase;letter-spacing:.04em;}
 .rtable td:last-child{text-align:right;font-weight:700;color:var(--ac);}
 .ma-box{background:linear-gradient(135deg,rgba(41,199,138,.1),rgba(34,212,200,.1));border:1px solid rgba(41,199,138,.3);border-radius:var(--rs);padding:14px;margin-bottom:12px;text-align:center;}
-.ma-box .mav{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:var(--gr);}
+.ma-box .mav{font-family:'IBM Plex Mono',monospace;font-size:36px;font-weight:800;color:var(--gr);}
 .ma-box .mal{font-size:12px;color:var(--tx2);margin-top:2px;}
 .ma-box .mad{font-size:11px;color:var(--tx3);margin-top:6px;}
-.ret-status{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+.ret-status{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:3px;font-size:11px;font-weight:700;}
 .ret-offen{background:rgba(240,80,110,.15);color:var(--re);}
 .ret-bearbeitet{background:rgba(41,199,138,.15);color:var(--gr);}
 .sf-wrap{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
-.sf-btn{padding:6px 12px;border-radius:20px;border:1px solid var(--bd);background:var(--sf2);color:var(--tx2);font-size:11px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:.18s;}
-.sf-btn.active{background:var(--ac);color:#fff;border-color:var(--ac);}
+.sf-btn{padding:6px 12px;border-radius:3px;border:1px solid var(--bd);background:var(--sf2);color:var(--tx2);font-size:11px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:.18s;}
+.sf-btn.active{background:var(--tx);color:var(--bg);border-color:var(--tx);}
 #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:11px 18px;font-size:12px;box-shadow:var(--sh);transition:transform .3s;z-index:99999;white-space:nowrap;max-width:90vw;}
 #toast.show{transform:translateX(-50%) translateY(0);}
 #toast.ok{border-color:var(--gr);}
@@ -141,45 +141,45 @@ select option{background:var(--sf2);}
 .chart-wrap{background:var(--sf2);border-radius:var(--rs);padding:10px;margin-top:8px;position:relative;height:180px;}
 .dev-credit{margin-top:16px;text-align:right;padding:8px 12px;}
 .dev-credit .dl{font-size:9px;color:var(--tx3);letter-spacing:.06em;}
-.dev-credit .dn{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--tx2);}
+.dev-credit .dn{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:var(--tx2);}
 .dev-credit .ds{font-size:9px;color:var(--tx3);}
-.sec-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(41,199,138,.1);border:1px solid rgba(41,199,138,.25);border-radius:20px;padding:3px 8px;font-size:10px;color:var(--gr);font-weight:700;}
+.sec-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(41,199,138,.1);border:1px solid rgba(41,199,138,.25);border-radius:3px;padding:3px 8px;font-size:10px;color:var(--gr);font-weight:700;}
 .warn-box{background:rgba(240,80,110,.08);border:1px solid rgba(240,80,110,.25);border-radius:var(--rs);padding:12px;font-size:12px;color:var(--re);margin-bottom:10px;}
 .backup-row{display:flex;gap:8px;flex-wrap:wrap;}
 .backup-row .btn{flex:1;min-width:120px;}
 /* Retouren Produkt-Tabs */
 .prod-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
-.prod-tab{padding:6px 14px;border-radius:20px;border:1px solid var(--bd);background:var(--sf2);color:var(--tx2);font-size:11px;font-weight:700;cursor:pointer;transition:.18s;}
-.prod-tab.active{background:var(--ac);color:#fff;border-color:var(--ac);}
-.prod-tab-add{padding:6px 12px;border-radius:20px;border:1px dashed var(--bd);background:transparent;color:var(--tx3);font-size:11px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;}
+.prod-tab{padding:6px 14px;border-radius:3px;border:1px solid var(--bd);background:var(--sf2);color:var(--tx2);font-size:11px;font-weight:700;cursor:pointer;transition:.18s;}
+.prod-tab.active{background:var(--tx);color:var(--bg);border-color:var(--tx);}
+.prod-tab-add{padding:6px 12px;border-radius:3px;border:1px dashed var(--bd);background:transparent;color:var(--tx3);font-size:11px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;}
 /* AMPEL SYSTEM */
 .ampel-wrap{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--rs);margin-top:8px;font-size:12px;font-weight:700;}
 .ampel-gruen{background:rgba(41,199,138,.12);border:1px solid rgba(41,199,138,.35);color:var(--gr);}
 .ampel-gelb{background:rgba(255,209,102,.12);border:1px solid rgba(255,209,102,.35);color:var(--ye);}
 .ampel-rot{background:rgba(240,80,110,.15);border:1px solid rgba(240,80,110,.4);color:var(--re);}
-.ampel-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;}
+.ampel-dot{width:14px;height:14px;border-radius:4px;flex-shrink:0;}
 .ampel-gruen .ampel-dot{background:var(--gr);box-shadow:0 0 8px rgba(41,199,138,.6);}
 .ampel-gelb .ampel-dot{background:var(--ye);box-shadow:0 0 8px rgba(255,209,102,.6);}
 .ampel-rot .ampel-dot{background:var(--re);box-shadow:0 0 8px rgba(240,80,110,.6);}
-textarea{resize:vertical;min-height:70px;width:100%;background:var(--sf2);border:1px solid var(--bd);color:var(--tx);padding:10px 12px;border-radius:var(--rs);font-size:14px;font-family:'Nunito',sans-serif;transition:border-color .2s;}
+textarea{resize:vertical;min-height:70px;width:100%;background:var(--sf2);border:1px solid var(--bd);color:var(--tx);padding:10px 12px;border-radius:var(--rs);font-size:14px;font-family:'IBM Plex Sans',sans-serif;transition:border-color .2s;}
 textarea:focus{outline:none;border-color:var(--ac);}
-.notiz-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.25);border-radius:12px;padding:2px 8px;font-size:10px;color:var(--or);}
+.notiz-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.25);border-radius:3px;padding:2px 8px;font-size:10px;color:var(--or);}
 .support-banner{background:rgba(61,142,240,.07);border:1px solid rgba(61,142,240,.2);border-radius:var(--rs);padding:10px 14px;font-size:11px;color:var(--tx2);margin-top:10px;text-align:center;}
 .support-banner a{color:var(--ac);text-decoration:none;font-weight:700;}
 /* CUSTOM CONFIRM MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:99998;display:flex;align-items:center;justify-content:center;padding:20px;}
 .modal-box{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:22px;width:100%;max-width:340px;box-shadow:var(--sh);}
-.modal-box h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;}
+.modal-box h3{font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:700;margin-bottom:8px;}
 .modal-box p{font-size:13px;color:var(--tx2);margin-bottom:16px;line-height:1.5;}
 .modal-btns{display:flex;gap:8px;}
-.modal-btns button{flex:1;padding:11px;border-radius:var(--rs);font-size:13px;font-weight:700;font-family:'Nunito',sans-serif;border:none;cursor:pointer;}
+.modal-btns button{flex:1;padding:11px;border-radius:var(--rs);font-size:13px;font-weight:700;font-family:'IBM Plex Sans',sans-serif;border:none;cursor:pointer;}
 .modal-ok{background:var(--re);color:#fff;}
 .modal-cancel{background:var(--sf2);color:var(--tx2);border:1px solid var(--bd)!important;}
 /* ALLE PRODUKTE ÜBERSICHT */
 .alle-prod-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
 .prod-kpi-card{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 12px;}
 .prod-kpi-card .pkn{font-size:10px;color:var(--tx2);font-weight:700;text-transform:uppercase;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;}
-.prod-kpi-card .pkv{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;}
+.prod-kpi-card .pkv{font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:800;}
 .prod-kpi-card .pks{font-size:10px;color:var(--tx2);margin-top:2px;}
 @media print{#loginOverlay,#setupOverlay,#welcomeOverlay,.app-header,.nav-tabs,#toast,.btn,.btn-p,.btn-s,.btn-d,.btn-o,.btn-ghost,.no-print{display:none!important;}body{background:#fff;color:#000;}.card{border:1px solid #ccc;background:#fff;}.tab-panel{display:block!important;}}
 @media(max-width:400px){.rgrid{grid-template-columns:1fr;}}
@@ -202,88 +202,212 @@ textarea:focus{outline:none;border-color:var(--ac);}
 <body>
 
 <!-- ═══ WELCOME ═══ -->
-<div id="welcomeOverlay" class="overlay">
-  <div class="login-logo">⚙ Arbeitsplan Manager</div>
-  <div class="login-sub">v16.0 · J.Elkaame</div>
-  <div class="welcome-box">
-    <h2 style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px;">Willkommen! 👋</h2>
-    <p style="font-size:12px;color:var(--tx2);margin-bottom:14px;">Ihr professionelles Werkzeug für Schicht- und Lagerverwaltung.</p>
+<div id="welcomeOverlay" class="overlay" style="padding:0;background:var(--bg);overflow-y:auto;display:block;">
+<style>
+.lp-wrap{min-height:100vh;display:flex;flex-direction:column;}
+/* HERO */
+.lp-hero{padding:60px 24px 50px;text-align:center;border-bottom:1px solid var(--bd);position:relative;overflow:hidden;}
+.lp-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(212,216,228,.04) 0%,transparent 70%);pointer-events:none;}
+.lp-tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--tx3);border:1px solid var(--bd);border-radius:3px;padding:4px 12px;margin-bottom:20px;}
+.lp-title{font-family:'IBM Plex Mono',monospace;font-size:clamp(26px,6vw,44px);font-weight:600;letter-spacing:.04em;text-transform:uppercase;line-height:1.1;margin-bottom:12px;color:var(--tx);}
+.lp-title span{color:var(--tx3);}
+.lp-sub{font-size:14px;color:var(--tx2);max-width:440px;margin:0 auto 28px;line-height:1.7;font-family:'IBM Plex Sans',sans-serif;}
+.lp-cta{display:inline-flex;align-items:center;gap:10px;background:var(--tx);color:var(--bg);font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:14px 28px;border-radius:3px;border:none;cursor:pointer;transition:opacity .15s;}
+.lp-cta:hover{opacity:.85;}
+.lp-version{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--tx3);margin-top:16px;letter-spacing:.08em;}
+/* STATS BAR */
+.lp-stats{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--bd);}
+.lp-stat{padding:20px 16px;text-align:center;border-right:1px solid var(--bd);}
+.lp-stat:last-child{border-right:none;}
+.lp-stat-v{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;color:var(--tx);line-height:1;}
+.lp-stat-l{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--tx3);letter-spacing:.1em;text-transform:uppercase;margin-top:5px;}
+/* FEATURES GRID */
+.lp-section{padding:36px 20px;}
+.lp-section-label{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--tx3);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.lp-section-label::after{content:'';flex:1;height:1px;background:var(--bd);}
+.lp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.lp-card{background:var(--sf);border:1px solid var(--bd);border-radius:4px;padding:16px;position:relative;overflow:hidden;transition:border-color .2s;}
+.lp-card:hover{border-color:var(--tx3);}
+.lp-card-num{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--tx3);letter-spacing:.06em;margin-bottom:10px;}
+.lp-card-icon{font-size:18px;margin-bottom:10px;line-height:1;}
+.lp-card-title{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--tx);margin-bottom:6px;}
+.lp-card-desc{font-size:12px;color:var(--tx2);line-height:1.65;font-family:'IBM Plex Sans',sans-serif;}
+.lp-card-tag{display:inline-block;margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:2px;}
+/* NOTICE SECTION */
+.lp-notice{padding:0 20px 30px;}
+.lp-notice-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.lp-notice-card{background:var(--sf);border:1px solid var(--bd);border-radius:4px;padding:14px;}
+.lp-notice-card-label{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;margin-bottom:7px;}
+.lp-notice-card-text{font-size:12px;color:var(--tx2);line-height:1.65;}
+/* FOOTER */
+.lp-footer{margin-top:auto;border-top:1px solid var(--bd);padding:24px 20px;}
+.lp-footer-inner{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;}
+.lp-dev-label{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--tx3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.lp-dev-name{font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:600;color:var(--tx);letter-spacing:.04em;line-height:1;}
+.lp-dev-contact{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--tx3);margin-top:5px;letter-spacing:.04em;}
+.lp-footer-cta{text-align:right;}
+.lp-footer-cta .lp-cta{font-size:11px;padding:12px 22px;}
+</style>
 
-    <div class="welcome-feature">
-      <div class="welcome-feature-icon">📅</div>
-      <div class="welcome-feature-text"><h4>Schichtplanung</h4><p>Früh-, Spät- und Nachtschichten erfassen, mehrere Mitarbeiter gleichzeitig zuweisen. Notizfeld für Schichtbesonderheiten (z.B. Maschinenausfall).</p></div>
-    </div>
-    <div class="welcome-feature">
-      <div class="welcome-feature-icon">📊</div>
-      <div class="welcome-feature-text"><h4>Leistungsmessung</h4><p>Stückzahl je Mitarbeiter erfassen. Automatische Ermittlung der Top-Performer – auch bei Gleichstand.</p></div>
-    </div>
-    <div class="welcome-feature">
-      <div class="welcome-feature-icon">📦</div>
-      <div class="welcome-feature-text"><h4>Stücklisten (mehrere Produkte)</h4><p>Materialbedarf und Mitarbeiterbedarf für beliebig viele Produkte berechnen und speichern.</p></div>
-    </div>
-    <div class="welcome-feature">
-      <div class="welcome-feature-icon">↩</div>
-      <div class="welcome-feature-text"><h4>Retouren-Analyse mit Ampel-System</h4><p>Retourenquote wird automatisch mit Ampel (🟢🟡🔴) bewertet. Offen-Formel: Gemeldet - Bearbeitet - Ausschuss = Offen.</p></div>
-    </div>
-    <div class="welcome-feature">
-      <div class="welcome-feature-icon">🏖</div>
-      <div class="welcome-feature-text"><h4>Urlaubsplan</h4><p>Urlaube planen mit automatischer Erinnerung 30 Tage im Voraus.</p></div>
-    </div>
-    <div class="welcome-feature">
-      <div class="welcome-feature-icon">📄</div>
-      <div class="welcome-feature-text"><h4>Professioneller PDF-Bericht</h4><p>Vollständiger Wochenbericht mit Tabellen, Diagrammen & Schichtnotizen. Per Email versendbar.</p></div>
-    </div>
-    <div class="welcome-feature">
-      <div class="welcome-feature-icon">💾</div>
-      <div class="welcome-feature-text"><h4>JSON-Backup & Datenübertragung</h4><p>Exportiere & importiere alle Daten als JSON-Datei, um Daten auf andere Geräte zu übertragen.</p></div>
-    </div>
+<div class="lp-wrap">
 
-    <div class="info-banner">
-      <strong>💾 Lokale Datenspeicherung</strong><br>
-      Alle Daten werden <strong>ausschließlich lokal</strong> auf diesem Gerät im Browserspeicher (localStorage) gespeichert. Es werden keine Daten an externe Server übertragen.
+  <!-- HERO -->
+  <section class="lp-hero">
+    <div class="lp-tag">v16.0 — Produktionsmanagement</div>
+    <h1 class="lp-title">Arbeitsplan<br><span>Manager</span></h1>
+    <p class="lp-sub">Professionelle Lösung für Schichtplanung, Leistungserfassung und Lageranalyse — alles in einer App, vollständig offline.</p>
+    <button class="lp-cta" onclick="closeWelcome()">App starten &rarr;</button>
+    <div class="lp-version">APM · Alle Daten lokal · Kein Server</div>
+  </section>
+
+  <!-- STATS -->
+  <div class="lp-stats">
+    <div class="lp-stat">
+      <div class="lp-stat-v">8</div>
+      <div class="lp-stat-l">Module</div>
     </div>
-    <div class="warn-banner">
-      <strong>⚠️ Wichtiger Hinweis:</strong><br>
-      Wenn Sie den Browser-Cache oder die App-Daten löschen, gehen <strong>alle gespeicherten Daten unwiederbringlich verloren</strong>.<br><br>
-      👉 <strong>Empfehlung:</strong> Exportieren Sie regelmäßig (wöchentlich) einen PDF-Bericht sowie ein JSON-Backup unter dem Tab <em>„Daten"</em>, um Ihre Daten dauerhaft zu sichern.
+    <div class="lp-stat">
+      <div class="lp-stat-v">100%</div>
+      <div class="lp-stat-l">Offline</div>
     </div>
-    <div class="info-banner" style="margin-top:6px;">
-      📧 <strong>Support:</strong> Bei Problemen oder Fragen: <a href="mailto:ElKaame.Ji@gmx.de" style="color:var(--ac);font-weight:700;">ElKaame.Ji@gmx.de</a>
+    <div class="lp-stat">
+      <div class="lp-stat-v">PDF</div>
+      <div class="lp-stat-l">Export</div>
     </div>
-    <button class="btn btn-p" onclick="closeWelcome()" style="margin-top:4px;">✅ Verstanden – App starten</button>
   </div>
+
+  <!-- FEATURES -->
+  <section class="lp-section">
+    <div class="lp-section-label">Funktionen</div>
+    <div class="lp-grid">
+
+      <div class="lp-card">
+        <div class="lp-card-num">01</div>
+        <div class="lp-card-title">Schichtplan</div>
+        <div class="lp-card-desc">Früh-, Spät- und Nachtschichten planen. Mehrere Mitarbeiter gleichzeitig zuweisen. Wocheneinsatzplan auf einen Blick.</div>
+        <div class="lp-card-tag" style="background:rgba(184,150,42,.1);color:var(--ye);">Wochenplan</div>
+      </div>
+
+      <div class="lp-card">
+        <div class="lp-card-num">02</div>
+        <div class="lp-card-title">Urlaubsplan</div>
+        <div class="lp-card-desc">Urlaube und Krankmeldungen erfassen. Automatische 30-Tage-Vorwarnung. Gantt-Übersicht aller Abwesenheiten.</div>
+        <div class="lp-card-tag" style="background:rgba(58,158,158,.1);color:var(--te);">Abwesenheit</div>
+      </div>
+
+      <div class="lp-card">
+        <div class="lp-card-num">03</div>
+        <div class="lp-card-title">Leistung</div>
+        <div class="lp-card-desc">Stückzahlen je Mitarbeiter und Schicht erfassen. Top-Performer automatisch ermitteln. Verlauf und Diagramme.</div>
+        <div class="lp-card-tag" style="background:rgba(61,186,124,.1);color:var(--gr);">KPI</div>
+      </div>
+
+      <div class="lp-card">
+        <div class="lp-card-num">04</div>
+        <div class="lp-card-title">Stückliste</div>
+        <div class="lp-card-desc">Materialbedarf und Personalplanung für mehrere Produkte berechnen und speichern. Mengenangabe frei wählbar.</div>
+        <div class="lp-card-tag" style="background:rgba(201,138,58,.1);color:var(--or);">Produktion</div>
+      </div>
+
+      <div class="lp-card">
+        <div class="lp-card-num">05</div>
+        <div class="lp-card-title">Retouren</div>
+        <div class="lp-card-desc">Retourenquote je Produkt analysieren. Ampel-System (Grün / Gelb / Rot) bewertet automatisch die Quote. Ausschuss und offene Retouren getrennt erfasst.</div>
+        <div class="lp-card-tag" style="background:rgba(192,67,79,.1);color:var(--re);">Qualität</div>
+      </div>
+
+      <div class="lp-card">
+        <div class="lp-card-num">06</div>
+        <div class="lp-card-title">Statistik</div>
+        <div class="lp-card-desc">Schicht-Auswertungen nach Woche oder Monat. Retouren-Verlauf als Liniendiagramm. Mitarbeiter-Ranking auf einen Blick.</div>
+        <div class="lp-card-tag" style="background:rgba(212,216,228,.06);color:var(--tx2);">Analyse</div>
+      </div>
+
+      <div class="lp-card">
+        <div class="lp-card-num">07</div>
+        <div class="lp-card-title">Skills</div>
+        <div class="lp-card-desc">Qualifikations-Matrix für alle Mitarbeiter. Zertifikate und Fähigkeiten dokumentieren und auf einen Blick einsehen.</div>
+        <div class="lp-card-tag" style="background:rgba(212,216,228,.06);color:var(--tx2);">HR</div>
+      </div>
+
+      <div class="lp-card">
+        <div class="lp-card-num">08</div>
+        <div class="lp-card-title">Daten & PDF</div>
+        <div class="lp-card-desc">Vollständiger Wochenbericht als PDF. JSON-Backup für Datensicherung und Geräteübertragung. Passwortschutz je Konto.</div>
+        <div class="lp-card-tag" style="background:rgba(212,216,228,.06);color:var(--tx2);">Export</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- HINWEISE -->
+  <section class="lp-notice">
+    <div class="lp-section-label">Hinweise</div>
+    <div class="lp-notice-grid">
+      <div class="lp-notice-card">
+        <div class="lp-notice-card-label" style="color:var(--gr);">Datenschutz</div>
+        <div class="lp-notice-card-text">Alle Daten werden ausschließlich lokal auf diesem Gerät gespeichert. Kein Server, keine Cloud, keine Weitergabe.</div>
+      </div>
+      <div class="lp-notice-card" style="border-color:rgba(192,67,79,.3);">
+        <div class="lp-notice-card-label" style="color:var(--re);">Wichtig</div>
+        <div class="lp-notice-card-text">Beim Löschen des Browser-Caches gehen alle Daten verloren. Regelmäßiges JSON-Backup unter „Daten" empfohlen.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="lp-footer">
+    <div style="border-top:1px solid var(--bd);padding-top:24px;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+        <div>
+          <div class="lp-dev-label">Entwickelt von</div>
+          <div class="lp-dev-name">J. Elkaame</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--tx3);margin-top:6px;letter-spacing:.04em;">
+            Fragen oder Anmerkungen?
+          </div>
+          <a href="mailto:yo.mc@gmx.de" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--tx2);letter-spacing:.04em;text-decoration:none;border-bottom:1px solid var(--bd);">yo.mc@gmx.de</a>
+        </div>
+        <div style="text-align:right;">
+          <button class="lp-cta" onclick="closeWelcome()">App starten &rarr;</button>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--tx3);margin-top:8px;letter-spacing:.06em;text-transform:uppercase;">APM v16.0 · Lokal & Offline</div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>
 </div>
 
 <!-- ═══ LOGIN ═══ -->
 <div id="loginOverlay" class="overlay hidden">
-  <div class="login-logo">⚙ Arbeitsplan Manager</div>
-  <div class="login-sub">v16.0 · J.Elkaame</div>
+  <div class="login-logo">Arbeitsplan Manager</div>
+  <div class="login-sub">v16.0 · J. Elkaame</div>
   <div class="login-box">
     <div class="ltabs">
-      <div class="ltab active" id="lt-login" onclick="swLoginTab('login')">🔑 Anmelden</div>
-      <div class="ltab" id="lt-reg" onclick="swLoginTab('reg')">➕ Registrieren</div>
+      <div class="ltab active" id="lt-login" onclick="swLoginTab('login')">Anmelden</div>
+      <div class="ltab" id="lt-reg" onclick="swLoginTab('reg')">Registrieren</div>
     </div>
     <div id="loginForm">
       <div id="accList" style="margin-bottom:12px;"></div>
       <div class="fg"><label>Abteilung</label><select id="loginSel" style="width:100%;background:var(--sf2);border:1px solid var(--bd);color:var(--tx);padding:10px 12px;border-radius:var(--rs);font-size:14px;"></select></div>
       <div class="fg"><label>Passwort</label><input type="password" id="loginPw" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
-      <button class="btn btn-p" onclick="doLogin()">🔑 Anmelden</button>
+      <button class="btn btn-p" onclick="doLogin()">Anmelden</button>
     </div>
     <div id="regForm" style="display:none;">
       <div class="fg"><label>Abteilungsname</label><input type="text" id="regName" placeholder="z.B. Montage-Team A"></div>
       <div class="fg"><label>Passwort</label><input type="password" id="regPw" placeholder="Mind. 4 Zeichen"></div>
       <div class="fg"><label>Wiederholen</label><input type="password" id="regPw2" placeholder="••••••••" onkeydown="if(event.key==='Enter')doReg()"></div>
-      <button class="btn btn-s" onclick="doReg()">✅ Konto erstellen</button>
+      <button class="btn btn-s" onclick="doReg()">Konto erstellen</button>
     </div>
   </div>
 </div>
 
 <!-- ═══ SETUP ═══ -->
 <div id="setupOverlay" class="overlay hidden" style="z-index:9999;">
-  <div class="login-logo">⚙ Arbeitsplan Manager</div>
+  <div class="login-logo">Arbeitsplan Manager</div>
   <div class="login-sub">Bereiche einrichten</div>
   <div id="setupBox">
-    <h2 style="font-family:'Syne',sans-serif;font-size:17px;font-weight:700;margin-bottom:4px;">Bereiche auswählen</h2>
+    <h2 style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:700;margin-bottom:4px;">Bereiche auswählen</h2>
     <p style="font-size:12px;color:var(--tx2);margin-bottom:16px;">Wähle Arbeitsbereiche oder füge eigene hinzu.</p>
     <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;" id="presetChips">
       <div class="area-chip" onclick="togglePreset(this)">Montage</div><div class="area-chip" onclick="togglePreset(this)">Lager</div>
@@ -297,7 +421,8 @@ textarea:focus{outline:none;border-color:var(--ac);}
       <button class="btn btn-o btn-sm" onclick="addCustomArea()">+ Hinzufügen</button>
     </div>
     <div id="selectedAreasList" style="display:flex;flex-wrap:wrap;gap:6px;min-height:28px;margin-bottom:14px;"></div>
-    <button class="btn btn-p" onclick="finishSetup()">App starten →</button>
+    <button class="btn btn-p" onclick="finishSetup()" style="margin-bottom:8px;">Speichern &amp; starten</button>
+    <button class="btn btn-o" onclick="closeSetup()" style="font-size:11px;">Abbrechen — zurück zur App</button>
   </div>
 </div>
 
@@ -305,7 +430,7 @@ textarea:focus{outline:none;border-color:var(--ac);}
 <div id="app">
   <header class="app-header">
     <div style="display:flex;align-items:center;gap:8px;">
-      <div class="logo">⚙ APM</div>
+      <div class="logo">APM</div>
       <span class="huser" id="headerUser"></span>
     </div>
     <div class="header-clock">
@@ -313,35 +438,35 @@ textarea:focus{outline:none;border-color:var(--ac);}
       <div class="clock-date" id="clockDate">Mo. 01.01.2025</div>
     </div>
     <div style="display:flex;align-items:center;gap:2px;">
-      <button class="btn-ghost" onclick="doExportPDF()" title="PDF-Bericht" style="font-size:15px;">📄</button>
-      <button class="btn-ghost" onclick="showTab('daten',document.querySelector('[data-tab=daten]'))" title="Daten" style="font-size:15px;">💾</button>
-      <button class="btn-ghost" onclick="openSetup()" title="Bereiche" style="font-size:15px;">⚙️</button>
-      <button class="btn-ghost" onclick="toggleTheme()" title="Hell/Dunkel" style="font-size:15px;" id="themeBtn">🌙</button>
-      <button class="btn-ghost" onclick="doLogout()" title="Abmelden" style="font-size:15px;">🚪</button>
+      <button class="btn-ghost" onclick="doExportPDF()" title="PDF">PDF</button>
+      <button class="btn-ghost" onclick="showTab('daten',document.querySelector('[data-tab=daten]'))" title="Daten">Daten</button>
+      <button class="btn-ghost" onclick="openSetup()" title="Bereiche">Setup</button>
+      <button class="btn-ghost" onclick="toggleTheme()" id="themeBtn">Hell</button>
+      <button onclick="doLogout()" style="background:transparent;border:1px solid var(--bd);color:var(--tx2);font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:6px 11px;border-radius:3px;cursor:pointer;transition:border-color .15s,color .15s;" onmouseover="this.style.borderColor='var(--re)';this.style.color='var(--re)'" onmouseout="this.style.borderColor='var(--bd)';this.style.color='var(--tx2)'">Abmelden</button>
     </div>
   </header>
 
   <nav class="nav-tabs">
-    <button class="nav-tab active" data-tab="schichtplan" onclick="showTab('schichtplan',this)">📅 Schichtplan</button>
-    <button class="nav-tab" data-tab="urlaub" onclick="showTab('urlaub',this)">🏖 Urlaub</button>
-    <button class="nav-tab" data-tab="leistung" onclick="showTab('leistung',this)">📊 Leistung</button>
-    <button class="nav-tab" data-tab="stueckliste" onclick="showTab('stueckliste',this)">📦 Stückliste</button>
-    <button class="nav-tab" data-tab="retouren" onclick="showTab('retouren',this)">↩ Retouren</button>
-    <button class="nav-tab" data-tab="statistik" onclick="showTab('statistik',this)">📈 Statistik</button>
-    <button class="nav-tab" data-tab="qualifikation" onclick="showTab('qualifikation',this)">🎓 Skills</button>
-    <button class="nav-tab" data-tab="daten" onclick="showTab('daten',this)">💾 Daten</button>
+    <button class="nav-tab active" data-tab="schichtplan" onclick="showTab('schichtplan',this)">Schichtplan</button>
+    <button class="nav-tab" data-tab="urlaub" onclick="showTab('urlaub',this)">Urlaub</button>
+    <button class="nav-tab" data-tab="leistung" onclick="showTab('leistung',this)">Leistung</button>
+    <button class="nav-tab" data-tab="stueckliste" onclick="showTab('stueckliste',this)">Stückliste</button>
+    <button class="nav-tab" data-tab="retouren" onclick="showTab('retouren',this)">Retouren</button>
+    <button class="nav-tab" data-tab="statistik" onclick="showTab('statistik',this)">Statistik</button>
+    <button class="nav-tab" data-tab="qualifikation" onclick="showTab('qualifikation',this)">Skills</button>
+    <button class="nav-tab" data-tab="daten" onclick="showTab('daten',this)">Daten</button>
   </nav>
 
   <main class="content">
 
     <!-- ═══ SCHICHTPLAN (Bereich + Schicht zusammengeführt) ═══ -->
     <div id="tab-schichtplan" class="tab-panel active">
-      <div class="section-header"><h2>Schichtplan</h2><p>Wocheneinsatzplan · Mitarbeiter · Bereiche</p></div>
+      <div class="section-header"><h2>Schichtplan</h2><p>Wocheneinsatzplan — Mitarbeiter — Bereiche</p></div>
 
       <!-- BEREICH + MA SEKTION (kompakt, ausklappbar) -->
       <div class="card" id="maCard">
         <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleMACard()">
-          <div class="card-title" style="margin-bottom:0;">👥 Mitarbeiter verwalten – <span id="bereichTabLbl" style="color:var(--ac);">–</span></div>
+          <div class="card-title" style="margin-bottom:0;">Mitarbeiter verwalten – <span id="bereichTabLbl" style="color:var(--ac);">–</span></div>
           <span id="maCardArrow" style="font-size:16px;color:var(--tx2);">▶</span>
         </div>
         <div id="maCardBody" style="margin-top:12px;display:none;">
@@ -352,12 +477,12 @@ textarea:focus{outline:none;border-color:var(--ac);}
           </div>
           <div class="fg"><label>Rolle</label>
             <select id="maRolle">
-              <option>👷 Arbeiter</option><option>👔 Teamleiter</option>
-              <option>🔧 Schichtleiter</option><option>📚 Azubi</option>
+              <option>Arbeiter</option><option>Teamleiter</option>
+              <option>Schichtleiter</option><option>Azubi</option>
             </select>
           </div>
           <button class="btn btn-s" onclick="addMitarbeiter()" style="margin-bottom:10px;">+ Mitarbeiter hinzufügen</button>
-          <div id="mitarbeiterListe"><div class="empty"><div class="icon">👥</div>Noch keine Mitarbeiter.</div></div>
+          <div id="mitarbeiterListe"><div class="empty"><div class="icon"></div>Noch keine Mitarbeiter.</div></div>
         </div>
       </div>
 
@@ -365,22 +490,22 @@ textarea:focus{outline:none;border-color:var(--ac);}
       <div class="card" style="border-color:rgba(61,142,240,.4);padding:12px;">
         <!-- Header -->
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
-          <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--ac);">📅 WOCHENEINSATZPLAN</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--tx);border-left:3px solid var(--tx);padding-left:10px;">WOCHENEINSATZPLAN</div>
           <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
-            <select id="schichtBereich" onchange="onSchichtBereichChange()" style="background:var(--sf2);border:1px solid var(--bd);color:var(--tx);padding:6px 10px;border-radius:var(--rs);font-size:12px;font-family:'Nunito',sans-serif;"></select>
-            <input type="week" id="wochenplanKW" onchange="renderWochenplan()" style="background:var(--sf2);border:1px solid var(--bd);color:var(--tx);padding:6px 10px;border-radius:var(--rs);font-size:12px;font-family:'Nunito',sans-serif;">
-            <button class="btn btn-o btn-sm" onclick="downloadWochenplan()">⬇️</button>
-            <button class="btn btn-o btn-sm" onclick="emailWochenplan()">📧</button>
+            <select id="schichtBereich" onchange="onSchichtBereichChange()" style="background:var(--sf2);border:1px solid var(--bd);color:var(--tx);padding:6px 10px;border-radius:var(--rs);font-size:12px;font-family:'IBM Plex Sans',sans-serif;"></select>
+            <input type="week" id="wochenplanKW" onchange="renderWochenplan()" style="background:var(--sf2);border:1px solid var(--bd);color:var(--tx);padding:6px 10px;border-radius:var(--rs);font-size:12px;font-family:'IBM Plex Sans',sans-serif;">
+            <button class="btn btn-o btn-sm" onclick="downloadWochenplan()">Export</button>
+            <button class="btn btn-o btn-sm" onclick="emailWochenplan()">E-Mail</button>
           </div>
         </div>
 
         <!-- Legende -->
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;font-size:10px;color:var(--tx2);">
-          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:3px;background:#78350f;display:inline-block;border:2px solid #f59e0b;"></span>🌅 Früh</span>
-          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:3px;background:#78640a;display:inline-block;border:2px solid #f5c518;"></span>🌆 Spät</span>
-          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:3px;background:#3b0764;display:inline-block;border:2px solid #a855f7;"></span>🌙 Nacht</span>
-          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:3px;background:#065f46;display:inline-block;border:2px solid #10b981;"></span>🏖 Urlaub</span>
-          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:3px;background:#7f1d1d;display:inline-block;border:2px solid #ef4444;"></span>🤒 Krank</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:3px;background:#78350f;display:inline-block;border:2px solid #f59e0b;"></span>Früh</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:3px;background:#78640a;display:inline-block;border:2px solid #f5c518;"></span>Spät</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:3px;background:#3b0764;display:inline-block;border:2px solid #a855f7;"></span>Nacht</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:3px;background:#065f46;display:inline-block;border:2px solid #10b981;"></span>Urlaub</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:3px;background:#7f1d1d;display:inline-block;border:2px solid #ef4444;"></span>Krank</span>
         </div>
 
         <!-- WOCHENTABELLE – Zeilen=Schicht, Spalten=Tag -->
@@ -388,15 +513,15 @@ textarea:focus{outline:none;border-color:var(--ac);}
 
         <!-- ABWESENHEITEN UNTER DER TABELLE -->
         <div style="margin-top:12px;border-top:1px solid var(--bd);padding-top:12px;">
-          <div class="card-title" style="color:var(--re);">🏖 Abwesenheiten eintragen (Urlaub / Krank)</div>
+          <div class="card-title" style="">Abwesenheiten eintragen (Urlaub / Krank)</div>
           <div id="abwList" style="margin-bottom:10px;display:flex;flex-direction:column;gap:6px;"></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
             <div class="fg" style="margin-bottom:0;"><label>Name</label><input type="text" id="abwName" placeholder="Müller Max" list="dlAllNames"></div>
             <div class="fg" style="margin-bottom:0;"><label>Art</label>
               <select id="abwArt">
-                <option value="Urlaub">🏖 Urlaub</option>
-                <option value="Krank">🤒 Krank</option>
-                <option value="Sonstiges">📋 Sonstiges</option>
+                <option value="Urlaub">Urlaub</option>
+                <option value="Krank">Krank</option>
+                <option value="Sonstiges">Sonstiges</option>
               </select>
             </div>
           </div>
@@ -409,7 +534,7 @@ textarea:focus{outline:none;border-color:var(--ac);}
 
         <!-- SCHICHT EINTRAGEN UNTER DER TABELLE -->
         <div style="margin-top:14px;border-top:1px solid var(--bd);padding-top:12px;">
-          <div class="card-title" style="color:var(--ac);">✏️ Schicht eintragen</div>
+          <div class="card-title" style="">Schicht eintragen</div>
           <div class="fr">
             <div class="fg"><label>Von Datum</label><input type="date" id="schichtDatum"></div>
             <div class="fg"><label>Bis Datum (mehrere Tage)</label><input type="date" id="schichtDatumBis" onchange="updateDayCount()"></div>
@@ -431,9 +556,9 @@ textarea:focus{outline:none;border-color:var(--ac);}
           </div>
           <div class="fg"><label>Schichttyp</label>
               <div class="stype-row" style="margin-bottom:0;">
-                <button class="stype-btn" id="btn-f" onclick="setSchichtTyp('Früh')">🌅 Früh</button>
-                <button class="stype-btn" id="btn-s" onclick="setSchichtTyp('Spät')">🌆 Spät</button>
-                <button class="stype-btn" id="btn-n" onclick="setSchichtTyp('Nacht')">🌙 Nacht</button>
+                <button class="stype-btn" id="btn-f" onclick="setSchichtTyp('Früh')">Früh</button>
+                <button class="stype-btn" id="btn-s" onclick="setSchichtTyp('Spät')">Spät</button>
+                <button class="stype-btn" id="btn-n" onclick="setSchichtTyp('Nacht')">Nacht</button>
               </div>
             </div>
           <div id="schichtZeitFelder">
@@ -454,17 +579,17 @@ textarea:focus{outline:none;border-color:var(--ac);}
             <label>Mitarbeiter auswählen / hinzufügen</label>
             <div id="schichtMAWrap" style="display:flex;flex-wrap:wrap;gap:6px;padding:8px;background:var(--sf2);border-radius:var(--rs);min-height:40px;border:1px solid var(--bd);margin-bottom:6px;"></div>
             <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;">
-              <button class="btn btn-o btn-sm" onclick="selectAllMA(true)">✅ Alle</button>
-              <button class="btn btn-o btn-sm" onclick="selectAllMA(false)">☐ Keine</button>
+              <button class="btn btn-o btn-sm" onclick="selectAllMA(true)">Alle</button>
+              <button class="btn btn-o btn-sm" onclick="selectAllMA(false)"> Keine</button>
             </div>
             <!-- Schnell-Hinzufügen direkt hier -->
             <div style="display:flex;gap:6px;margin-top:4px;">
               <input type="text" id="schnellMA" placeholder="Namen eintippen & hinzufügen…" list="dlAllNames" style="flex:1;font-size:13px;" onkeydown="if(event.key==='Enter')schnellAddMA()">
               <button class="btn btn-o btn-sm" onclick="schnellAddMA()" style="white-space:nowrap;">+ Neu</button>
             </div>
-            <div style="font-size:10px;color:var(--tx3);margin-top:4px;">💡 Mitarbeiter verwalten: Karte oben aufklappen (▶)</div>
+            <div style="font-size:10px;color:var(--tx3);margin-top:4px;"> Mitarbeiter verwalten: Karte oben aufklappen (▶)</div>
           </div>
-          <div class="fg"><label>📝 Notiz (optional)</label><textarea id="schichtNotiz" placeholder="z.B. Maschinenausfall, Sonderschicht…" rows="2" style="min-height:52px;"></textarea></div>
+          <div class="fg"><label>Notiz (optional)</label><textarea id="schichtNotiz" placeholder="z.B. Maschinenausfall, Sonderschicht…" rows="2" style="min-height:52px;"></textarea></div>
           <button class="btn btn-p" onclick="addSchicht()">+ Schicht eintragen & Plan aktualisieren</button>
         </div>
       </div>
@@ -472,15 +597,15 @@ textarea:focus{outline:none;border-color:var(--ac);}
       <!-- SCHICHTLISTE -->
       <div class="card">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px;">
-          <div class="card-title" style="margin-bottom:0;">📋 Alle Schichten</div>
+          <div class="card-title" style="margin-bottom:0;">Alle Schichten</div>
           <div style="display:flex;gap:5px;flex-wrap:wrap;">
             <button class="sf-btn active" onclick="filterSchicht('alle',this)">Alle</button>
-            <button class="sf-btn" onclick="filterSchicht('Früh',this)">🌅</button>
-            <button class="sf-btn" onclick="filterSchicht('Spät',this)">🌆</button>
-            <button class="sf-btn" onclick="filterSchicht('Nacht',this)">🌙</button>
+            <button class="sf-btn" onclick="filterSchicht('Früh',this)"></button>
+            <button class="sf-btn" onclick="filterSchicht('Spät',this)"></button>
+            <button class="sf-btn" onclick="filterSchicht('Nacht',this)"></button>
           </div>
         </div>
-        <div id="schichtListe" class="lc"><div class="empty"><div class="icon">📅</div>Noch keine Schichten.</div></div>
+        <div id="schichtListe" class="lc"><div class="empty"><div class="icon"></div>Noch keine Schichten.</div></div>
       </div>
     </div>
 
@@ -501,18 +626,18 @@ textarea:focus{outline:none;border-color:var(--ac);}
         <button class="btn btn-p" onclick="addUrlaub()">+ Urlaub eintragen</button>
       </div>
       <div class="card">
-        <div class="card-title">🔔 Bevorstehend (30 Tage)</div>
+        <div class="card-title">Bevorstehend (30 Tage)</div>
         <div id="urlaubReminder"></div>
       </div>
       <div class="card">
         <div class="card-title">Alle Urlaube</div>
-        <div id="urlaubListe" class="lc"><div class="empty"><div class="icon">🏖</div>Noch keine Urlaube.</div></div>
+        <div id="urlaubListe" class="lc"><div class="empty"><div class="icon"></div>Noch keine Urlaube.</div></div>
       </div>
       <!-- GANTT CHART -->
       <div class="card" style="border-color:rgba(61,142,240,.3);">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px;">
-          <div class="card-title" style="margin-bottom:0;color:var(--ac);">📊 Urlaubs-Übersicht (Gantt)</div>
-          <input type="month" id="ganttMonat" onchange="renderGantt()" style="background:var(--sf2);border:1px solid var(--bd);color:var(--tx);padding:6px 10px;border-radius:var(--rs);font-size:12px;font-family:'Nunito',sans-serif;">
+          <div class="card-title" style="margin-bottom:0;">Urlaubs-Übersicht (Gantt)</div>
+          <input type="month" id="ganttMonat" onchange="renderGantt()" style="background:var(--sf2);border:1px solid var(--bd);color:var(--tx);padding:6px 10px;border-radius:var(--rs);font-size:12px;font-family:'IBM Plex Sans',sans-serif;">
         </div>
         <div id="ganttWrap" style="overflow-x:auto;"></div>
       </div>
@@ -529,9 +654,9 @@ textarea:focus{outline:none;border-color:var(--ac);}
         </div>
         <div class="fg"><label>Schichttyp</label>
           <div class="stype-row">
-            <button class="stype-btn" id="lbtn-f" onclick="setLeistungTyp('Früh')">🌅 Früh</button>
-            <button class="stype-btn" id="lbtn-s" onclick="setLeistungTyp('Spät')">🌆 Spät</button>
-            <button class="stype-btn" id="lbtn-n" onclick="setLeistungTyp('Nacht')">🌙 Nacht</button>
+            <button class="stype-btn" id="lbtn-f" onclick="setLeistungTyp('Früh')">Früh</button>
+            <button class="stype-btn" id="lbtn-s" onclick="setLeistungTyp('Spät')">Spät</button>
+            <button class="stype-btn" id="lbtn-n" onclick="setLeistungTyp('Nacht')">Nacht</button>
           </div>
         </div>
         <div class="fr">
@@ -543,7 +668,7 @@ textarea:focus{outline:none;border-color:var(--ac);}
         <div class="card-title">Mitarbeiter & Stückzahl</div>
         <div id="lPersonenWrap"></div>
         <button class="btn btn-o btn-sm no-print" onclick="addLeistungPerson()" style="margin-bottom:12px;">+ Person hinzufügen</button>
-        <button class="btn btn-p no-print" onclick="berechneLeistung()">📊 Berechnen & Speichern</button>
+        <button class="btn btn-p no-print" onclick="berechneLeistung()">Berechnen & Speichern</button>
       </div>
       <div id="leistungResult" style="display:none;" class="card">
         <div class="card-title">Ergebnis</div>
@@ -553,9 +678,9 @@ textarea:focus{outline:none;border-color:var(--ac);}
         <div class="card-title">Verlauf</div>
         <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;" class="no-print">
           <button class="sf-btn active" onclick="filterLeistung('alle',this)">Alle</button>
-          <button class="sf-btn" onclick="filterLeistung('Früh',this)">🌅</button>
-          <button class="sf-btn" onclick="filterLeistung('Spät',this)">🌆</button>
-          <button class="sf-btn" onclick="filterLeistung('Nacht',this)">🌙</button>
+          <button class="sf-btn" onclick="filterLeistung('Früh',this)"></button>
+          <button class="sf-btn" onclick="filterLeistung('Spät',this)"></button>
+          <button class="sf-btn" onclick="filterLeistung('Nacht',this)"></button>
         </div>
         <div id="leistungHistorie"></div>
       </div>
@@ -563,7 +688,7 @@ textarea:focus{outline:none;border-color:var(--ac);}
 
     <!-- ═══ STÜCKLISTE ═══ -->
     <div id="tab-stueckliste" class="tab-panel">
-      <div class="section-header"><h2>Stückliste</h2><p>Material & Mitarbeiterbedarf berechnen – mehrere Produkte</p></div>
+      <div class="section-header"><h2>Stückliste</h2><p>Material & Mitarbeiterbedarf — mehrere Produkte</p></div>
       <div class="card">
         <div class="card-title">Produkt anlegen</div>
         <div class="fg"><label>Produktname</label><input type="text" id="rzProdukt" placeholder="z.B. Tisch, Stuhl, Box…" list="dlProdukte"><datalist id="dlProdukte"></datalist></div>
@@ -577,18 +702,18 @@ textarea:focus{outline:none;border-color:var(--ac);}
         </div>
         <div class="fg"><label>Wie viele Stücke?</label><input type="number" id="rzAnzahl" placeholder="z.B. 100" min="1" value="1"></div>
         <div style="display:flex;gap:8px;" class="no-print">
-          <button class="btn btn-p" onclick="berechneRezept()" style="flex:1;">🔢 Berechnen</button>
-          <button class="btn btn-o btn-sm" onclick="saveRezept()">💾 Speichern</button>
+          <button class="btn btn-p" onclick="berechneRezept()" style="flex:1;">Berechnen</button>
+          <button class="btn btn-o btn-sm" onclick="saveRezept()">Speichern</button>
         </div>
         <div id="rzResult" style="display:none;margin-top:14px;">
           <div id="rzMaBox"></div>
-          <div class="card-title">📋 Materialbedarf für <span id="rzAnzahlLbl">–</span> Stück</div>
+          <div class="card-title">Materialbedarf für <span id="rzAnzahlLbl">–</span> Stück</div>
           <table class="rtable"><thead><tr><th>Material</th><th>Pro Stück</th><th>Gesamt</th></tr></thead><tbody id="rzBody"></tbody></table>
         </div>
       </div>
       <div class="card">
         <div class="card-title">Gespeicherte Stücklisten</div>
-        <div id="stueckListe" class="lc"><div class="empty"><div class="icon">📦</div>Noch keine Listen.</div></div>
+        <div id="stueckListe" class="lc"><div class="empty"><div class="icon"></div>Noch keine Listen.</div></div>
       </div>
     </div>
 
@@ -603,23 +728,23 @@ textarea:focus{outline:none;border-color:var(--ac);}
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <input type="text" id="retNewProd" placeholder="Neues Produkt…" style="flex:1;min-width:120px;">
           <button class="btn btn-o btn-sm" onclick="addRetProdukt()">+ Hinzufügen</button>
-          <button class="btn btn-sm" style="background:rgba(240,80,110,.15);border:1px solid rgba(240,80,110,.4);color:var(--re);" onclick="delRetProdukt()">🗑 Produkt löschen</button>
+          <button class="btn btn-sm" style="background:rgba(240,80,110,.15);border:1px solid rgba(240,80,110,.4);color:var(--re);" onclick="delRetProdukt()">Produkt löschen</button>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-title">📦 Produktion & Versand – <span id="retAktProdLbl" style="color:var(--ac);">–</span></div>
+        <div class="card-title">Produktion & Versand – <span id="retAktProdLbl" style="color:var(--ac);">–</span></div>
         <div class="fg"><label>Produzierte Stücke (gesamt)</label><input type="number" id="retProd" placeholder="z.B. 300" min="0"></div>
         <div style="background:rgba(240,80,110,.06);border:1px solid rgba(240,80,110,.2);border-radius:var(--rs);padding:12px;margin-bottom:10px;">
-          <div class="card-title" style="color:var(--re);margin-bottom:8px;">⚠️ Ausschuss (von Produktion)</div>
+          <div class="card-title" style="margin-bottom:8px;">Ausschuss (von Produktion)</div>
           <div class="fr">
-            <div class="fg"><label>🔧 Nachbesserungsbedarf (Stk)</label><input type="number" id="retReparierbar" placeholder="z.B. 15" min="0" oninput="calcAusschussLive()"></div>
-            <div class="fg"><label>💀 Defekt (Stk)</label><input type="number" id="retKaputt" placeholder="z.B. 5" min="0" oninput="calcAusschussLive()"></div>
+            <div class="fg"><label>Nachbesserungsbedarf (Stk)</label><input type="number" id="retReparierbar" placeholder="z.B. 15" min="0" oninput="calcAusschussLive()"></div>
+            <div class="fg"><label> Defekt (Stk)</label><input type="number" id="retKaputt" placeholder="z.B. 5" min="0" oninput="calcAusschussLive()"></div>
           </div>
           <div id="ausschussLiveInfo" style="font-size:11px;color:var(--tx2);margin-top:4px;display:none;"></div>
           <!-- FEHLERGRUND gehört zur Produktion -->
           <div class="fg" style="margin-top:10px;margin-bottom:0;">
-            <label>⚠️ Fehlergrund / Ursache des Ausschusses (frei eingeben)</label>
+            <label>Fehlergrund / Ursache des Ausschusses (frei eingeben)</label>
             <input type="text" id="retFehlergrund"
               placeholder="z.B. Riss am Deckel Artikel 4711, Farbabweichung…"
               list="dlFehlergrund"
@@ -643,7 +768,7 @@ textarea:focus{outline:none;border-color:var(--ac);}
         </div>
         <div class="fg"><label>Versendete Stücke</label><input type="number" id="retVersandt" placeholder="z.B. 280" min="0"></div>
         <div id="retValidWarn" class="warn-box" style="display:none;"></div>
-        <div class="card-title" style="margin-top:12px;">↩ Retouren-Eingang</div>
+        <div class="card-title" style="margin-top:12px;">Retouren-Eingang</div>
         <div class="fg">
           <label>Zeitraum</label>
           <select id="retZeitraum" onchange="toggleRetDatum()">
@@ -661,66 +786,66 @@ textarea:focus{outline:none;border-color:var(--ac);}
           <label>Tatsächlich vorhandene Reklamationen im Lager (Stk)</label>
           <input type="number" id="retZurueck" placeholder="z.B. 60" min="0">
         </div>
-        <button class="btn btn-p no-print" onclick="berechneRetouren()">📊 Analyse starten</button>
+        <button class="btn btn-p no-print" onclick="berechneRetouren()">Analyse starten</button>
       </div>
 
       <div id="retResult" style="display:none;" class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-          <div class="card-title" style="margin-bottom:0;">📊 Ergebnis – <span id="retZeitraumLbl">–</span></div>
+          <div class="card-title" style="margin-bottom:0;">Ergebnis – <span id="retZeitraumLbl">–</span></div>
           <span id="retStatusBadge" class="ret-status ret-offen">⏳ Offen</span>
         </div>
         <div id="retAmpel" style="display:none;" class="ampel-wrap"></div>
         <div class="rgrid" style="grid-template-columns:1fr 1fr 1fr;">
           <div class="ri"><div class="v vb" id="retProdVal">–</div><div class="l">Produziert</div></div>
-          <div class="ri"><div class="v vo" id="retReparierbarVal">–</div><div class="l">🔧 Nachbesserung</div></div>
-          <div class="ri"><div class="v vr" id="retKaputtVal">–</div><div class="l">💀 Defekt</div></div>
+          <div class="ri"><div class="v vo" id="retReparierbarVal">–</div><div class="l">Nachbesserung</div></div>
+          <div class="ri"><div class="v vr" id="retKaputtVal">–</div><div class="l"> Defekt</div></div>
           <div class="ri"><div class="v vt" id="retVersandtVal">–</div><div class="l">Versendet</div></div>
           <div class="ri"><div class="v vo" id="retZurueckVal">–</div><div class="l">Reklamationen im Lager</div></div>
           <div class="ri"><div class="v vg" id="retOkVal">–</div><div class="l">Fehlerfrei</div></div>
         </div>
         <div style="margin-top:12px;">
-          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--tx2);"><span>🔧 Nachbesserungs-Quote (von Produziert)</span><span id="retRepPct">0%</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--tx2);"><span>Nachbesserungs-Quote (von Produziert)</span><span id="retRepPct">0%</span></div>
           <div class="pb-wrap"><div class="pb" id="retRepBar" style="background:var(--or);width:0%"></div></div>
-          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--tx2);margin-top:5px;"><span>💀 Defekt-Quote (von Produziert)</span><span id="retKapPct">0%</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--tx2);margin-top:5px;"><span> Defekt-Quote (von Produziert)</span><span id="retKapPct">0%</span></div>
           <div class="pb-wrap"><div class="pb" id="retKapBar" style="background:var(--re);width:0%"></div></div>
-          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--tx2);margin-top:5px;"><span>📦 Gesamter Ausschuss (Nachbesserung+Defekt)</span><span id="retFwPct">0%</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--tx2);margin-top:5px;"><span>Gesamter Ausschuss (Nachbesserung+Defekt)</span><span id="retFwPct">0%</span></div>
           <div class="pb-wrap"><div class="pb" id="retFwBar" style="background:var(--ac2);width:0%"></div></div>
-          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--tx2);margin-top:5px;"><span>↩ Reklamationsquote (von Versendet)</span><span id="retRekPct">0%</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--tx2);margin-top:5px;"><span>Reklamationsquote (von Versendet)</span><span id="retRekPct">0%</span></div>
           <div class="pb-wrap"><div class="pb" id="retRekBar" style="background:var(--ac);width:0%"></div></div>
         </div>
         <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--bd);">
-          <div class="card-title">🔧 Retouren-Bearbeitung im Lager</div>
+          <div class="card-title">Retouren-Bearbeitung im Lager</div>
           <div style="background:rgba(162,89,255,.06);border:1px solid rgba(162,89,255,.2);border-radius:var(--rs);padding:10px;margin-bottom:10px;font-size:12px;color:var(--tx2);">
-            📐 <strong style="color:var(--ac2);">Formel:</strong> Reklamationen im Lager − Bearbeitet OK − Defekt = Offen
+             <strong style="color:var(--ac2);">Formel:</strong> Reklamationen im Lager − Bearbeitet OK − Defekt = Offen
           </div>
           <div class="fg">
-            <label>📦 Tatsächlich vorhandene Reklamationen im Lager (Stk)</label>
+            <label>Tatsächlich vorhandene Reklamationen im Lager (Stk)</label>
             <input type="number" id="retBearbeitet" placeholder="z.B. 60" min="0" oninput="liveOffenCalc()">
           </div>
           <div class="fr">
-            <div class="fg"><label>✅ Bearbeitet – OK / Wiedergebucht (Stk)</label><input type="number" id="retAusschussRep" placeholder="z.B. 30" min="0" oninput="liveOffenCalc()"></div>
-            <div class="fg"><label>💀 Bearbeitet – Defekt (Stk)</label><input type="number" id="retAusschuss" placeholder="z.B. 10" min="0" oninput="liveOffenCalc()"></div>
+            <div class="fg"><label>Bearbeitet – OK / Wiedergebucht (Stk)</label><input type="number" id="retAusschussRep" placeholder="z.B. 30" min="0" oninput="liveOffenCalc()"></div>
+            <div class="fg"><label> Bearbeitet – Defekt (Stk)</label><input type="number" id="retAusschuss" placeholder="z.B. 10" min="0" oninput="liveOffenCalc()"></div>
           </div>
           <!-- LIVE OFFEN-RECHNUNG -->
           <div id="retOffenCalc" style="display:none;background:rgba(162,89,255,.08);border:1px solid rgba(162,89,255,.25);border-radius:var(--rs);padding:12px;margin:8px 0;font-size:12px;">
-            <div style="font-weight:700;color:var(--ac2);margin-bottom:6px;">📐 Berechnung (live):</div>
+            <div style="font-weight:700;color:var(--ac2);margin-bottom:6px;"> Berechnung (live):</div>
             <div id="retOffenFormel" style="color:var(--tx2);font-family:monospace;font-size:11px;line-height:1.8;white-space:pre-wrap;"></div>
-            <div id="retOffenVal" style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-top:6px;"></div>
+            <div id="retOffenVal" style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:800;margin-top:6px;"></div>
             <div id="retOffenWarn" style="font-size:11px;color:var(--re);margin-top:4px;display:none;"></div>
           </div>
           <div id="retBearbResult" style="display:none;margin-top:10px;"></div>
-          <button class="btn btn-o no-print" style="margin-top:8px;" onclick="berechneBearbeitung()">✅ Bearbeitung auswerten & speichern</button>
+          <button class="btn btn-o no-print" style="margin-top:8px;" onclick="berechneBearbeitung()">Bearbeitung auswerten & speichern</button>
         </div>
-        <button class="btn btn-o no-print" style="margin-top:12px;" onclick="saveRetEintrag()">💾 Eintrag speichern</button>
+        <button class="btn btn-o no-print" style="margin-top:12px;" onclick="saveRetEintrag()">Eintrag speichern</button>
       </div>
 
       <div id="retVergleich" style="display:none;" class="card">
-        <div class="card-title">📊 Vergleich mit Vorperiode</div>
+        <div class="card-title">Vergleich mit Vorperiode</div>
         <div id="retVergleichInner"></div>
       </div>
       <!-- ALLE PRODUKTE AUF EINEN BLICK -->
       <div class="card">
-        <div class="card-title">📦 Alle Produkte – Übersicht</div>
+        <div class="card-title">Alle Produkte – Übersicht</div>
         <div id="retAlleProdukte"><div class="empty"><div class="icon">↩</div>Noch keine Daten.</div></div>
       </div>
       <div class="card">
@@ -737,22 +862,22 @@ textarea:focus{outline:none;border-color:var(--ac);}
       <div class="card no-print">
         <div class="card-title">Schicht-Zeitraum</div>
         <div class="sf-wrap">
-          <button class="sf-btn active" onclick="setStatMode('woche',this)">📅 Woche</button>
-          <button class="sf-btn" onclick="setStatMode('monat',this)">📆 Monat</button>
+          <button class="sf-btn active" onclick="setStatMode('woche',this)">Woche</button>
+          <button class="sf-btn" onclick="setStatMode('monat',this)"> Monat</button>
         </div>
         <div id="statWocheInput"><div class="fg"><label>Kalenderwoche</label><input type="week" id="statWoche" style="width:100%;background:var(--sf2);border:1px solid var(--bd);color:var(--tx);padding:10px 12px;border-radius:var(--rs);font-size:14px;"></div></div>
         <div id="statMonatInput" style="display:none;"><div class="fg"><label>Monat</label><input type="month" id="statMonat" style="width:100%;background:var(--sf2);border:1px solid var(--bd);color:var(--tx);padding:10px 12px;border-radius:var(--rs);font-size:14px;"></div></div>
-        <button class="btn btn-p" onclick="updateStatistik()">📊 Schichten auswerten</button>
+        <button class="btn btn-p" onclick="updateStatistik()">Schichten auswerten</button>
       </div>
       <div id="statistikResult"></div>
 
       <!-- NEU: Retouren Liniendiagramm-Verlauf -->
       <div class="card" style="margin-top:10px;">
-        <div class="card-title">📈 Retouren-Verlauf (Liniendiagramm)</div>
+        <div class="card-title">Retouren-Verlauf (Liniendiagramm)</div>
         <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;">
-          <button class="sf-btn active" id="chartModeBtn-tag" onclick="setChartMode('tag',this)">📅 Täglich</button>
-          <button class="sf-btn" id="chartModeBtn-woche" onclick="setChartMode('woche',this)">📆 Wöchentlich</button>
-          <button class="sf-btn" id="chartModeBtn-monat" onclick="setChartMode('monat',this)">📆 Monatlich</button>
+          <button class="sf-btn active" id="chartModeBtn-tag" onclick="setChartMode('tag',this)">Täglich</button>
+          <button class="sf-btn" id="chartModeBtn-woche" onclick="setChartMode('woche',this)"> Wöchentlich</button>
+          <button class="sf-btn" id="chartModeBtn-monat" onclick="setChartMode('monat',this)"> Monatlich</button>
         </div>
         <div class="fg" style="margin-bottom:8px;">
           <label>Produkt filtern</label>
@@ -765,7 +890,7 @@ textarea:focus{outline:none;border-color:var(--ac);}
         <div style="font-size:11px;color:var(--tx2);margin:10px 0 6px;font-weight:700;">PRODUZIERT & FEHLWARE</div>
         <div class="chart-wrap" style="height:200px;"><canvas id="chartVerlaufProd"></canvas></div>
         <div id="chartLeerHinweis" style="display:none;text-align:center;padding:20px;color:var(--tx2);font-size:12px;">
-          📭 Noch keine Retouren gespeichert. Trage Daten im Retouren-Tab ein.
+           Noch keine Retouren gespeichert. Trage Daten im Retouren-Tab ein.
         </div>
       </div>
 
@@ -778,20 +903,20 @@ textarea:focus{outline:none;border-color:var(--ac);}
 
     <!-- ═══ QUALIFIKATION ═══ -->
     <div id="tab-qualifikation" class="tab-panel">
-      <div class="section-header"><h2>🎓 Skills & Qualifikationen</h2><p>Qualifikations-Matrix · Zertifikate</p></div>
+      <div class="section-header"><h2>Skills & Qualifikationen</h2><p>Qualifikations-Matrix · Zertifikate</p></div>
       <div class="card">
         <div class="card-title">Qualifikation hinzufügen</div>
         <div class="fr">
           <div class="fg"><label>Mitarbeiter</label><input type="text" id="qualMA" placeholder="Müller Max" list="dlAllNames"></div>
           <div class="fg"><label>Qualifikation</label>
             <select id="qualTyp">
-              <option value="Staplerschein">🚜 Staplerschein</option>
-              <option value="Ersthelfer">🩺 Ersthelfer</option>
-              <option value="Gefahrgut">⚠️ Gefahrgut</option>
-              <option value="Brandschutz">🔥 Brandschutz</option>
-              <option value="Schichtleiter">👔 Schichtleiter</option>
-              <option value="Qualitätsprüfer">🔍 Qualitätsprüfer</option>
-              <option value="Sonstiges">📋 Sonstiges</option>
+              <option value="Staplerschein"> Staplerschein</option>
+              <option value="Ersthelfer"> Ersthelfer</option>
+              <option value="Gefahrgut">Gefahrgut</option>
+              <option value="Brandschutz"> Brandschutz</option>
+              <option value="Schichtleiter">Schichtleiter</option>
+              <option value="Qualitätsprüfer"> Qualitätsprüfer</option>
+              <option value="Sonstiges">Sonstiges</option>
             </select>
           </div>
         </div>
@@ -802,8 +927,8 @@ textarea:focus{outline:none;border-color:var(--ac);}
         <button class="btn btn-p" onclick="addQualifikation()">+ Qualifikation eintragen</button>
       </div>
       <div class="card">
-        <div class="card-title">📋 Qualifikations-Matrix</div>
-        <div id="qualMatrix"><div class="empty"><div class="icon">🎓</div>Noch keine Qualifikationen.</div></div>
+        <div class="card-title">Qualifikations-Matrix</div>
+        <div id="qualMatrix"><div class="empty"><div class="icon"></div>Noch keine Qualifikationen.</div></div>
       </div>
     </div>
 
@@ -813,7 +938,7 @@ textarea:focus{outline:none;border-color:var(--ac);}
 
       <!-- BERICHT HAUPTKARTE -->
       <div class="card" style="border-color:rgba(61,142,240,.4);background:linear-gradient(135deg,rgba(61,142,240,.06),rgba(162,89,255,.06));">
-        <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--ac);margin-bottom:6px;">📋 Wochenbericht erstellen</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:800;color:var(--ac);margin-bottom:6px;">Wochenbericht erstellen</div>
         <p style="font-size:12px;color:var(--tx2);margin-bottom:14px;line-height:1.6;">
           Der Bericht öffnet sich direkt im Browser als vollständige Seite.<br>
           Dann: <strong style="color:var(--tx);">Teilen-Button</strong> des Browsers → <strong style="color:var(--tx);">„Als PDF speichern"</strong> oder direkt per <strong style="color:var(--tx);">WhatsApp / Email</strong> verschicken.
@@ -827,46 +952,46 @@ textarea:focus{outline:none;border-color:var(--ac);}
           </select>
         </div>
         <button class="btn" style="background:var(--ac);color:#fff;margin-bottom:8px;" onclick="berichtImBrowserOeffnen()">
-          📋 Bericht öffnen (im Browser anzeigen)
+          Bericht öffnen (im Browser anzeigen)
         </button>
         <button class="btn btn-o" onclick="berichtAlsDateiSpeichern()">
-          💾 Bericht als HTML-Datei speichern
+          Bericht als HTML-Datei speichern
         </button>
         <div style="margin-top:10px;background:rgba(255,209,102,.08);border:1px solid rgba(255,209,102,.25);border-radius:var(--rs);padding:10px;font-size:11px;color:var(--ye);line-height:1.6;">
-          💡 <strong>Tipp für Android:</strong> „Bericht öffnen" → oben rechts ⋮ Menü → <em>Teilen</em> oder <em>Drucken</em> → PDF speichern
+           <strong>Tipp für Android:</strong> „Bericht öffnen" → oben rechts ⋮ Menü → <em>Teilen</em> oder <em>Drucken</em> → PDF speichern
         </div>
       </div>
 
       <!-- WOCHENSCHICHTPLAN BERICHT -->
       <div class="card" style="border-color:rgba(41,199,138,.3);">
-        <div class="card-title" style="color:var(--gr);">📅 Wochenschichtplan-Bericht</div>
+        <div class="card-title" style="">Wochenschichtplan-Bericht</div>
         <p style="font-size:12px;color:var(--tx2);margin-bottom:12px;">Öffnet den Wochenschichtplan (Tabelle Früh/Spät/Nacht) direkt im Browser zum Speichern oder Teilen.</p>
         <div class="fg">
           <label>Kalenderwoche</label>
           <input type="week" id="berichtKW" style="margin-bottom:10px;">
         </div>
         <button class="btn" style="background:var(--gr);color:#06201a;" onclick="wochenplanImBrowserOeffnen()">
-          📅 Schichtplan öffnen (im Browser)
+          Schichtplan öffnen (im Browser)
         </button>
       </div>
 
       <!-- EMAIL -->
       <div class="card">
-        <div class="card-title">📧 Bericht teilen</div>
+        <div class="card-title">Bericht teilen</div>
         <p style="font-size:12px;color:var(--tx2);margin-bottom:12px;">Öffnet die Email-App mit einem Kurzlink. Den gespeicherten Bericht als Anhang hinzufügen.</p>
-        <button class="btn btn-p" onclick="doSendEmail()">📧 Email-App öffnen</button>
+        <button class="btn btn-p" onclick="doSendEmail()">Email-App öffnen</button>
         <div class="support-banner" style="margin-top:10px;">
-          📢 Support: <a href="mailto:ElKaame.Ji@gmx.de">ElKaame.Ji@gmx.de</a>
+           Support: <a href="mailto:yo.mc@gmx.de">yo.mc@gmx.de</a>
         </div>
       </div>
 
       <!-- BACKUP -->
       <div class="card">
-        <div class="card-title">💾 Datensicherung (JSON-Backup)</div>
+        <div class="card-title">Datensicherung (JSON-Backup)</div>
         <p style="font-size:12px;color:var(--tx2);margin-bottom:12px;">Exportiere alle Daten als JSON-Datei – zum Übertragen auf andere Geräte oder als Sicherung.</p>
         <div class="backup-row">
-          <button class="btn btn-exp" onclick="doBackupExport()">⬆️ Backup exportieren</button>
-          <button class="btn btn-imp" onclick="document.getElementById('backupFileInput').click()">⬇️ Backup importieren</button>
+          <button class="btn btn-exp" onclick="doBackupExport()">⬆ Backup exportieren</button>
+          <button class="btn btn-imp" onclick="document.getElementById('backupFileInput').click()">Export Backup importieren</button>
         </div>
         <input type="file" id="backupFileInput" accept=".json" style="display:none;" onchange="doBackupImport(this)">
         <div id="backupInfo" style="margin-top:10px;font-size:11px;color:var(--tx2);"></div>
@@ -874,26 +999,26 @@ textarea:focus{outline:none;border-color:var(--ac);}
 
       <!-- PASSWORT -->
       <div class="card">
-        <div class="card-title">🔐 Passwort ändern</div>
+        <div class="card-title"> Passwort ändern</div>
         <div class="fg"><label>Aktuelles Passwort</label><input type="password" id="pwAlt" placeholder="••••••••"></div>
         <div class="fg"><label>Neues Passwort</label><input type="password" id="pwNeu" placeholder="Mind. 4 Zeichen"></div>
         <div class="fg"><label>Wiederholen</label><input type="password" id="pwNeu2" placeholder="••••••••"></div>
-        <button class="btn btn-p" onclick="changePassword()">🔐 Passwort ändern</button>
+        <button class="btn btn-p" onclick="changePassword()"> Passwort ändern</button>
       </div>
 
       <!-- DATEN LÖSCHEN -->
       <div class="card" style="border-color:rgba(240,80,110,.3);">
-        <div class="card-title" style="color:var(--re);">⚠️ Daten löschen</div>
+        <div class="card-title" style="">Daten löschen</div>
         <div class="warn-banner" style="margin:0 0 12px 0;">
-          ⚠️ <strong>Achtung:</strong> Gelöschte Daten können NICHT wiederhergestellt werden! Erstellen Sie vorher unbedingt ein Backup oder einen PDF-Bericht.
+          <strong>Achtung:</strong> Gelöschte Daten können NICHT wiederhergestellt werden! Erstellen Sie vorher unbedingt ein Backup oder einen PDF-Bericht.
         </div>
-        <button class="btn btn-d" style="width:100%;" onclick="clearBereichData()">🗑️ Bereichsdaten löschen (Schichten, Urlaub, Leistungen, Retouren)</button>
+        <button class="btn btn-d" style="width:100%;" onclick="clearBereichData()"> Bereichsdaten löschen (Schichten, Urlaub, Leistungen, Retouren)</button>
       </div>
     </div>
 
   </main>
   <div style="background:var(--sf2);border-top:1px dashed var(--bd);padding:10px;text-align:center;font-size:10px;color:var(--tx2);" class="no-print">
-    <strong style="display:block;font-size:11px;">📢 AdMob Banner</strong>
+    <strong style="display:block;font-size:11px;"> AdMob Banner</strong>
   </div>
 </div>
 
@@ -957,7 +1082,7 @@ function fd(d){if(!d)return'–';const[y,m,t]=d.split('-');return`${t}.${m}.${y}
 function fm(m){if(!m&&m!==0)return'–';const h=Math.floor(Math.abs(m)/60),mi=Math.abs(m)%60;return(m<0?'-':'')+(h>0?h+'h ':'')+mi+'m';}
 function cnm(v,b,p=0){if(!v||!b)return 0;const[vh,vm]=v.split(':').map(Number),[bh,bm]=b.split(':').map(Number);let d=(bh*60+bm)-(vh*60+vm);if(d<0)d+=24*60;return Math.max(0,d-p);}
 function du(d){const n=new Date(),t=new Date(d+'T00:00:00');n.setHours(0,0,0,0);return Math.round((t-n)/86400000);}
-function stb(t){return t==='Früh'?'🌅':t==='Spät'?'🌆':'🌙';}
+function stb(t){return t==='Früh'?'':t==='Spät'?'':'';}
 function toast(msg,type='ok'){const el=document.getElementById('toast');el.textContent=msg;el.className='show '+(type==='err'?'err':'ok');clearTimeout(CST);CST=setTimeout(()=>el.className='',2800);}
 function showTab(id,btn){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));const p=document.getElementById('tab-'+id);if(p)p.classList.add('active');if(btn)btn.classList.add('active');if(id==='daten'){renderBackupInfo();}if(id==='statistik'){renderRetCharts();}if(id==='retouren'){renderRetH();renderAlleProdukte();}if(id==='schichtplan'){setTimeout(()=>{renderSchichtMA();renderWochenplan();renderAbwList();updateNameHistory();},50);}if(id==='urlaub'){const mv=document.getElementById('ganttMonat');if(mv&&!mv.value){const n=new Date();mv.value=n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0');}renderGantt();}if(id==='qualifikation'){renderQualMatrix();}}
 
@@ -978,6 +1103,7 @@ updateClock();
 function closeWelcome(){
   document.getElementById('welcomeOverlay').classList.add('hidden');
   SG('welcomed','1');
+  SG('welcomed','1');
   document.getElementById('loginOverlay').classList.remove('hidden');
   renderAccList();
 }
@@ -987,8 +1113,8 @@ function renderAccList(){const acc=getAcc();const keys=Object.keys(acc);const el
 function swLoginTab(t){document.getElementById('loginForm').style.display=t==='login'?'block':'none';document.getElementById('regForm').style.display=t==='reg'?'block':'none';document.getElementById('lt-login').classList.toggle('active',t==='login');document.getElementById('lt-reg').classList.toggle('active',t==='reg');}
 function doLogin(){const k=document.getElementById('loginSel').value,pw=document.getElementById('loginPw').value;if(!k){toast('Abteilung wählen.','err');return;}const acc=getAcc();if(!acc[k]){toast('Konto nicht gefunden.','err');return;}if(acc[k].pw!==btoa(pw)){toast('Falsches Passwort.','err');return;}CK=k;CA=(acc[k].areas||[])[0]||'default';document.getElementById('loginOverlay').classList.add('hidden');startApp(acc[k].areas||[]);}
 function doReg(){const n=document.getElementById('regName').value.trim(),p=document.getElementById('regPw').value,p2=document.getElementById('regPw2').value;if(!n||n.length<2){toast('Name mind. 2 Zeichen.','err');return;}if(p.length<4){toast('Passwort mind. 4 Zeichen.','err');return;}if(p!==p2){toast('Passwörter stimmen nicht überein.','err');return;}const acc=getAcc(),k='acc_'+Date.now();acc[k]={name:n,pw:btoa(p),areas:[]};setAcc(acc);CK=k;document.getElementById('loginOverlay').classList.add('hidden');document.getElementById('setupOverlay').classList.remove('hidden');}
-function doLogout(){CK='';CA='';document.getElementById('app').style.display='none';document.getElementById('loginOverlay').classList.remove('hidden');document.getElementById('loginPw').value='';renderAccList();}
-function changePassword(){const alt=document.getElementById('pwAlt').value,neu=document.getElementById('pwNeu').value,neu2=document.getElementById('pwNeu2').value;const acc=getAcc();if(!acc[CK]||acc[CK].pw!==btoa(alt)){toast('Aktuelles Passwort falsch.','err');return;}if(neu.length<4){toast('Neues Passwort mind. 4 Zeichen.','err');return;}if(neu!==neu2){toast('Passwörter stimmen nicht überein.','err');return;}acc[CK].pw=btoa(neu);setAcc(acc);document.getElementById('pwAlt').value='';document.getElementById('pwNeu').value='';document.getElementById('pwNeu2').value='';toast('Passwort geändert ✓');}
+function doLogout(){CK='';CA='';document.getElementById('app').style.display='none';document.getElementById('loginOverlay').classList.add('hidden');document.getElementById('welcomeOverlay').classList.remove('hidden');document.getElementById('welcomeOverlay').scrollTop=0;if(document.getElementById('loginPw'))document.getElementById('loginPw').value='';}
+function changePassword(){const alt=document.getElementById('pwAlt').value,neu=document.getElementById('pwNeu').value,neu2=document.getElementById('pwNeu2').value;const acc=getAcc();if(!acc[CK]||acc[CK].pw!==btoa(alt)){toast('Aktuelles Passwort falsch.','err');return;}if(neu.length<4){toast('Neues Passwort mind. 4 Zeichen.','err');return;}if(neu!==neu2){toast('Passwörter stimmen nicht überein.','err');return;}acc[CK].pw=btoa(neu);setAcc(acc);document.getElementById('pwAlt').value='';document.getElementById('pwNeu').value='';document.getElementById('pwNeu2').value='';toast('Passwort geändert ');}
 
 // ── SETUP ──
 function togglePreset(el){el.classList.toggle('selected');renderSelectedAreas();}
@@ -996,6 +1122,7 @@ function addCustomArea(){const v=document.getElementById('customAreaInput').valu
 function renderSelectedAreas(){const sel=Array.from(document.querySelectorAll('#presetChips .area-chip.selected')).map(c=>c.textContent);document.getElementById('selectedAreasList').innerHTML=sel.map(s=>`<span class="badge bb">${s}</span>`).join('');}
 function finishSetup(){const areas=Array.from(document.querySelectorAll('#presetChips .area-chip.selected')).map(c=>c.textContent);if(!areas.length){toast('Mind. 1 Bereich wählen.','err');return;}const acc=getAcc();if(acc[CK]){acc[CK].areas=areas;setAcc(acc);}SG('areas',areas);document.getElementById('setupOverlay').classList.add('hidden');startApp(areas);}
 function openSetup(){document.getElementById('setupOverlay').classList.remove('hidden');}
+function closeSetup(){document.getElementById('setupOverlay').classList.add('hidden');}
 
 // ── APP START ──
 function startApp(areas){const app=document.getElementById('app');app.style.display='flex';app.style.flexDirection='column';const acc=getAcc();document.getElementById('headerUser').textContent=acc[CK]?acc[CK].name:'';if(!areas.length)areas=['Standard'];CA=areas[0];refreshAll(areas);fillAreaSels(areas);renderRetProdTabs();initClockAndDates();}
@@ -1007,9 +1134,9 @@ function refreshAll(areas){const ar=areas||LG('areas',[CA]);renderMemberL();rend
 
 // ── MITARBEITER ──
 const colors=['#3d8ef0','#a259ff','#29c78a','#f5a623','#f0506e','#ffd166','#22d4c8'];
-function addMitarbeiter(){const vn=document.getElementById('maVn').value.trim(),nn=document.getElementById('maNn').value.trim(),rolle=document.getElementById('maRolle').value;if(!vn||!nn){toast('Vor- und Nachname eingeben.','err');return;}const list=getMembers();if(list.find(m=>m.vn===vn&&m.nn===nn)){toast('Mitarbeiter bereits vorhanden.','err');return;}list.push({id:Date.now(),vn,nn,rolle,color:colors[list.length%colors.length]});S('members',list);document.getElementById('maVn').value='';document.getElementById('maNn').value='';renderMemberL();renderSchichtMA();renderWochenplan();toast('Mitarbeiter hinzugefügt ✓');}
+function addMitarbeiter(){const vn=document.getElementById('maVn').value.trim(),nn=document.getElementById('maNn').value.trim(),rolle=document.getElementById('maRolle').value;if(!vn||!nn){toast('Vor- und Nachname eingeben.','err');return;}const list=getMembers();if(list.find(m=>m.vn===vn&&m.nn===nn)){toast('Mitarbeiter bereits vorhanden.','err');return;}list.push({id:Date.now(),vn,nn,rolle,color:colors[list.length%colors.length]});S('members',list);document.getElementById('maVn').value='';document.getElementById('maNn').value='';renderMemberL();renderSchichtMA();renderWochenplan();toast('Mitarbeiter hinzugefügt ');}
 function delMitarbeiter(id){showConfirm('Mitarbeiter entfernen','Soll dieser Mitarbeiter wirklich gelöscht werden?','Löschen',()=>{S('members',getMembers().filter(m=>m.id!==id));renderMemberL();renderSchichtMA();});}
-function renderMemberL(){const list=getMembers();const el=document.getElementById('mitarbeiterListe');if(!el)return;if(!list.length){el.innerHTML='<div class="empty"><div class="icon">👥</div>Noch keine Mitarbeiter.</div>';return;}el.innerHTML=list.map(m=>`<div class="mrow"><div class="mavatar" style="background:${m.color}22;color:${m.color};">${m.vn[0]}${m.nn[0]}</div><div class="minfo"><div class="mn">${m.vn} ${m.nn}</div><div class="mr">${m.rolle}</div></div><button class="btn-d" onclick="delMitarbeiter(${m.id})">✕</button></div>`).join('');}
+function renderMemberL(){const list=getMembers();const el=document.getElementById('mitarbeiterListe');if(!el)return;if(!list.length){el.innerHTML='<div class="empty"><div class="icon"></div>Noch keine Mitarbeiter.</div>';return;}el.innerHTML=list.map(m=>`<div class="mrow"><div class="mavatar" style="background:${m.color}22;color:${m.color};">${m.vn[0]}${m.nn[0]}</div><div class="minfo"><div class="mn">${m.vn} ${m.nn}</div><div class="mr">${m.rolle}</div></div><button class="btn-d" onclick="delMitarbeiter(${m.id})"></button></div>`).join('');}
 
 // ── SCHICHT ──
 let selMA=new Set();
@@ -1040,9 +1167,9 @@ function renderSchichtMA(){
   el.innerHTML=members.map(m=>{
     const name=m.vn+' '+m.nn;
     const sel=selMA.has(name);
-    return`<div style="display:inline-flex;align-items:center;gap:0;border-radius:20px;border:1px solid ${sel?'var(--ac)':'var(--bd)'};background:${sel?'rgba(61,142,240,.2)':'var(--sf3)'};overflow:hidden;transition:.15s;">
+    return`<div style="display:inline-flex;align-items:center;gap:0;border-radius:3px;border:1px solid ${sel?'var(--ac)':'var(--bd)'};background:${sel?'rgba(61,142,240,.2)':'var(--sf3)'};overflow:hidden;transition:.15s;">
       <div onclick="toggleMAsel(this,'${name.replace(/'/g,"\\'")}');renderSchichtMAColors()" data-name="${name}" style="cursor:pointer;padding:6px 10px;font-size:12px;font-weight:600;color:${sel?'var(--ac)':'var(--tx2)'};">${name}</div>
-      <div onclick="removeMAFromList(${m.id})" style="cursor:pointer;padding:6px 8px 6px 0;font-size:11px;color:var(--re);font-weight:700;" title="Mitarbeiter löschen">✕</div>
+      <div onclick="removeMAFromList(${m.id})" style="cursor:pointer;padding:6px 8px 6px 0;font-size:11px;color:var(--re);font-weight:700;" title="Mitarbeiter löschen"></div>
     </div>`;
   }).join('');
 }
@@ -1084,17 +1211,17 @@ function schnellAddMA(){
     renderSchichtMA();
     renderSchichtMAColors();
     inp.value='';
-    toast(`${val} ausgewählt ✓`);
+    toast(`${val} ausgewählt `);
     return;
   }
-  list.push({id:Date.now(),vn,nn,rolle:'👷 Arbeiter',color:colors[list.length%colors.length]});
+  list.push({id:Date.now(),vn,nn,rolle:'Arbeiter',color:colors[list.length%colors.length]});
   S('members',list);
   selMA.add(vn+' '+nn);
   renderMemberL();
   renderSchichtMA();
   renderWochenplan();
   inp.value='';
-  toast(`${vn} ${nn} hinzugefügt & ausgewählt ✓`);
+  toast(`${vn} ${nn} hinzugefügt & ausgewählt `);
 }
 function toggleMAsel(el,name){
   if(selMA.has(name)){
@@ -1129,7 +1256,7 @@ function addSchicht(){
   S('schichten',list);
   CA=old;
   renderSchichtL(); renderWochenplan();
-  toast(`${dates.length} Schicht(en) eingetragen ✓`);
+  toast(`${dates.length} Schicht(en) eingetragen `);
   selMA=new Set(); renderSchichtMAColors();
   document.getElementById('schichtNotiz').value='';
   selWD=new Set();
@@ -1139,33 +1266,33 @@ function addSchicht(){
 let CSF='alle';
 function filterSchicht(f,btn){CSF=f;document.querySelectorAll('#tab-schicht .sf-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderSchichtL();}
 function delSchicht(id){S('schichten',L('schichten').filter(s=>s.id!==id));renderSchichtL();}
-function renderSchichtL(){let list=L('schichten').sort((a,b)=>new Date(b.datum)-new Date(a.datum));if(CSF!=='alle')list=list.filter(s=>s.schichtTyp===CSF);const el=document.getElementById('schichtListe');if(!el)return;if(!list.length){el.innerHTML='<div class="empty"><div class="icon">📅</div>Noch keine Schichten.</div>';return;}el.innerHTML=list.map(s=>{const n=s.netto!=null?s.netto:cnm(s.von,s.bis,s.pause||0);const cls=s.schichtTyp==='Früh'?'by':s.schichtTyp==='Spät'?'bo':'bp';const notizHtml=s.notiz?`<div style="margin-top:4px;"><span class="notiz-badge">📝 ${s.notiz}</span></div>`:'';return`<div class="li"><div class="li-info"><div class="tt">${stb(s.schichtTyp)} ${fd(s.datum)} <span class="badge ${cls}">${s.schichtTyp}</span></div><div class="st">${s.von}–${s.bis} (${fm(n)}) · ${(s.personen||[]).join(', ')}</div>${notizHtml}</div><button class="btn-d" onclick="delSchicht(${s.id})">✕</button></div>`;}).join('');}
+function renderSchichtL(){let list=L('schichten').sort((a,b)=>new Date(b.datum)-new Date(a.datum));if(CSF!=='alle')list=list.filter(s=>s.schichtTyp===CSF);const el=document.getElementById('schichtListe');if(!el)return;if(!list.length){el.innerHTML='<div class="empty"><div class="icon"></div>Noch keine Schichten.</div>';return;}el.innerHTML=list.map(s=>{const n=s.netto!=null?s.netto:cnm(s.von,s.bis,s.pause||0);const cls=s.schichtTyp==='Früh'?'by':s.schichtTyp==='Spät'?'bo':'bp';const notizHtml=s.notiz?`<div style="margin-top:4px;"><span class="notiz-badge">${s.notiz}</span></div>`:'';return`<div class="li"><div class="li-info"><div class="tt">${stb(s.schichtTyp)} ${fd(s.datum)} <span class="badge ${cls}">${s.schichtTyp}</span></div><div class="st">${s.von}–${s.bis} (${fm(n)}) · ${(s.personen||[]).join(', ')}</div>${notizHtml}</div><button class="btn-d" onclick="delSchicht(${s.id})"></button></div>`;}).join('');}
 
 // ── URLAUB ──
-function addUrlaub(){const name=document.getElementById('urlaubName').value.trim(),von=document.getElementById('urlaubVon').value,bis=document.getElementById('urlaubBis').value;if(!name||!von||!bis){toast('Alle Felder ausfüllen.','err');return;}if(von>bis){toast('Von-Datum muss vor Bis-Datum liegen.','err');return;}const list=L('urlaube');list.unshift({id:Date.now(),name,von,bis});S('urlaube',list);renderUrlaubL();renderUrlaubR();toast('Urlaub eingetragen ✓');document.getElementById('urlaubName').value='';document.getElementById('urlaubVon').value='';document.getElementById('urlaubBis').value='';}
+function addUrlaub(){const name=document.getElementById('urlaubName').value.trim(),von=document.getElementById('urlaubVon').value,bis=document.getElementById('urlaubBis').value;if(!name||!von||!bis){toast('Alle Felder ausfüllen.','err');return;}if(von>bis){toast('Von-Datum muss vor Bis-Datum liegen.','err');return;}const list=L('urlaube');list.unshift({id:Date.now(),name,von,bis});S('urlaube',list);renderUrlaubL();renderUrlaubR();toast('Urlaub eingetragen ');document.getElementById('urlaubName').value='';document.getElementById('urlaubVon').value='';document.getElementById('urlaubBis').value='';}
 function deleteUrlaub(id){S('urlaube',L('urlaube').filter(u=>u.id!==id));renderUrlaubL();renderUrlaubR();}
-function renderUrlaubR(){const up=L('urlaube').filter(u=>du(u.von)>=0&&du(u.von)<=30).sort((a,b)=>du(a.von)-du(b.von));const el=document.getElementById('urlaubReminder');if(!el)return;if(!up.length){el.innerHTML='<div style="font-size:12px;color:var(--tx2);">Keine bevorstehenden Urlaube.</div>';return;}el.innerHTML=up.map(u=>{const d=du(u.von),lbl=d===0?'🚨 Heute!':d===1?'⚡ Morgen!':`in ${d} Tagen`,cls=d<=3?'br':d<=7?'bo':'by';return`<div style="background:rgba(255,209,102,.07);border:1px solid rgba(255,209,102,.22);border-radius:var(--rs);padding:11px 12px;margin-bottom:7px;"><div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--ye);">${u.name} <span class="badge ${cls}">${lbl}</span></div><div style="font-size:11px;color:var(--tx2);margin-top:2px;">${fd(u.von)} – ${fd(u.bis)}</div></div>`;}).join('');}
-function renderUrlaubL(){const l=L('urlaube');const el=document.getElementById('urlaubListe');if(!l.length){el.innerHTML='<div class="empty"><div class="icon">🏖</div>Noch keine Urlaube.</div>';return;}el.innerHTML=l.map(u=>{const d=du(u.von),b=d<0?'<span class="badge bg">✓ Vorbei</span>':d===0?'<span class="badge br">Heute</span>':`<span class="badge by">in ${d} Tagen</span>`;return`<div class="li"><div class="li-info"><div class="tt">${u.name} ${b}</div><div class="st">${fd(u.von)} – ${fd(u.bis)}</div></div><button class="btn-d" onclick="deleteUrlaub(${u.id})">✕</button></div>`;}).join('');}
+function renderUrlaubR(){const up=L('urlaube').filter(u=>du(u.von)>=0&&du(u.von)<=30).sort((a,b)=>du(a.von)-du(b.von));const el=document.getElementById('urlaubReminder');if(!el)return;if(!up.length){el.innerHTML='<div style="font-size:12px;color:var(--tx2);">Keine bevorstehenden Urlaube.</div>';return;}el.innerHTML=up.map(u=>{const d=du(u.von),lbl=d===0?' Heute!':d===1?' Morgen!':`in ${d} Tagen`,cls=d<=3?'br':d<=7?'bo':'by';return`<div style="background:rgba(255,209,102,.07);border:1px solid rgba(255,209,102,.22);border-radius:var(--rs);padding:11px 12px;margin-bottom:7px;"><div style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:700;color:var(--ye);">${u.name} <span class="badge ${cls}">${lbl}</span></div><div style="font-size:11px;color:var(--tx2);margin-top:2px;">${fd(u.von)} – ${fd(u.bis)}</div></div>`;}).join('');}
+function renderUrlaubL(){const l=L('urlaube');const el=document.getElementById('urlaubListe');if(!l.length){el.innerHTML='<div class="empty"><div class="icon"></div>Noch keine Urlaube.</div>';return;}el.innerHTML=l.map(u=>{const d=du(u.von),b=d<0?'<span class="badge bg"> Vorbei</span>':d===0?'<span class="badge br">Heute</span>':`<span class="badge by">in ${d} Tagen</span>`;return`<div class="li"><div class="li-info"><div class="tt">${u.name} ${b}</div><div class="st">${fd(u.von)} – ${fd(u.bis)}</div></div><button class="btn-d" onclick="deleteUrlaub(${u.id})"></button></div>`;}).join('');}
 
 // ── LEISTUNG ──
 let lPersonen=[{name:'',stueck:''}];
 function setLeistungTyp(t){CLT=t;['f','s','n'].forEach(x=>{const b=document.getElementById('lbtn-'+x);if(b)b.classList.remove('af','as','an');});if(t==='Früh')document.getElementById('lbtn-f').classList.add('af');else if(t==='Spät')document.getElementById('lbtn-s').classList.add('as');else document.getElementById('lbtn-n').classList.add('an');}
 function renderLeistungP(){const members=getMembers();const el=document.getElementById('lPersonenWrap');let html=`<datalist id="dlLeistung">${members.map(m=>`<option value="${m.vn} ${m.nn}">`).join('')}</datalist>`;lPersonen.forEach((p,i)=>{html+=`<div class="fr" style="margin-bottom:4px;"><div class="fg"><label>Name ${i+1}</label><input type="text" id="lpN_${i}" value="${p.name}" placeholder="Müller" list="dlAllNames" oninput="lPersonen[${i}].name=this.value"></div><div class="fg"><label>Stückzahl</label><input type="number" id="lpS_${i}" value="${p.stueck}" placeholder="90" min="0" oninput="lPersonen[${i}].stueck=this.value"></div></div>`;});el.innerHTML=html;}
 function addLeistungPerson(){lPersonen.push({name:'',stueck:''});renderLeistungP();}
-function berechneLeistung(){const bereich=document.getElementById('leistungBereich').value,datum=document.getElementById('leistungDatum').value;const zeit=parseFloat(document.getElementById('lZeit').value),ziel=parseFloat(document.getElementById('lZiel').value)||0;if(!CLT){toast('Schichttyp auswählen.','err');return;}if(!zeit||zeit<=0){toast('Arbeitszeit eingeben.','err');return;}lPersonen.forEach((p,i)=>{p.name=((document.getElementById('lpN_'+i)&&document.getElementById('lpN_'+i).value||'')||'').trim();p.stueck=parseFloat((document.getElementById('lpS_'+i)&&document.getElementById('lpS_'+i).value||0))||0;});const personen=lPersonen.filter(p=>p.name&&p.stueck>0).map(p=>({name:p.name,stueck:p.stueck}));if(!personen.length){toast('Mind. eine Person eingeben.','err');return;}const gs=personen.reduce((s,p)=>s+p.stueck,0),gph=(gs/zeit)*60,gz=ziel*personen.length;const gp=gz>0?Math.round(gs/gz*100):null,gc=gp===null?'var(--ac)':gp>=100?'var(--gr)':gp>=75?'var(--or)':'var(--re)';const el=document.getElementById('lResultInner');el.innerHTML=`<div class="rbox" style="margin-top:0;margin-bottom:12px;border-color:${gc}40;"><div style="font-size:11px;color:var(--tx2);margin-bottom:4px;">GESAMT ${stb(CLT)}</div><div class="rv" style="color:${gc}">${gp!==null?gp+'%':Math.round(gph)+' Stk/h'}</div><div class="rl">${gp!==null?`${gs} von ${gz} Stück · Ziel: ${ziel}/Person`:`${gs} Stücke in ${zeit} Min.`}</div>${gp!==null?`<div class="pb-wrap" style="margin-top:8px;"><div class="pb" style="background:${gc};width:${Math.min(gp,100)}%"></div></div>`:''}</div><div style="display:flex;flex-direction:column;gap:7px;">${personen.map(p=>{const pp=ziel>0?Math.round(p.stueck/ziel*100):null,pc=pp===null?'var(--ac)':pp>=100?'var(--gr)':pp>=75?'var(--or)':'var(--re)';return`<div class="li"><div class="li-info"><div class="tt" style="gap:6px;">${p.name} ${pp!==null?`<span class="badge" style="background:${pc}22;color:${pc}">${pp}%</span>`:''}</div><div class="st">${p.stueck} Stk${ziel>0?' · Ziel: '+ziel:''} · ${((p.stueck/zeit)*60).toFixed(1)} Stk/h</div>${pp!==null?`<div class="pb-wrap" style="margin-top:5px;"><div class="pb" style="background:${pc};width:${Math.min(pp,100)}%"></div></div>`:''}</div></div>`;}).join('')}</div>`;document.getElementById('leistungResult').style.display='block';const list=L('leistungen');list.unshift({id:Date.now(),datum:datum||new Date().toISOString().split('T')[0],schichtTyp:CLT,bereich,personen,gs,gph:Math.round(gph),zeit,ziel,gp});S('leistungen',list);renderLeistungH();toast('Leistung gespeichert ✓');}
+function berechneLeistung(){const bereich=document.getElementById('leistungBereich').value,datum=document.getElementById('leistungDatum').value;const zeit=parseFloat(document.getElementById('lZeit').value),ziel=parseFloat(document.getElementById('lZiel').value)||0;if(!CLT){toast('Schichttyp auswählen.','err');return;}if(!zeit||zeit<=0){toast('Arbeitszeit eingeben.','err');return;}lPersonen.forEach((p,i)=>{p.name=((document.getElementById('lpN_'+i)&&document.getElementById('lpN_'+i).value||'')||'').trim();p.stueck=parseFloat((document.getElementById('lpS_'+i)&&document.getElementById('lpS_'+i).value||0))||0;});const personen=lPersonen.filter(p=>p.name&&p.stueck>0).map(p=>({name:p.name,stueck:p.stueck}));if(!personen.length){toast('Mind. eine Person eingeben.','err');return;}const gs=personen.reduce((s,p)=>s+p.stueck,0),gph=(gs/zeit)*60,gz=ziel*personen.length;const gp=gz>0?Math.round(gs/gz*100):null,gc=gp===null?'var(--ac)':gp>=100?'var(--gr)':gp>=75?'var(--or)':'var(--re)';const el=document.getElementById('lResultInner');el.innerHTML=`<div class="rbox" style="margin-top:0;margin-bottom:12px;border-color:${gc}40;"><div style="font-size:11px;color:var(--tx2);margin-bottom:4px;">GESAMT ${stb(CLT)}</div><div class="rv" style="color:${gc}">${gp!==null?gp+'%':Math.round(gph)+' Stk/h'}</div><div class="rl">${gp!==null?`${gs} von ${gz} Stück · Ziel: ${ziel}/Person`:`${gs} Stücke in ${zeit} Min.`}</div>${gp!==null?`<div class="pb-wrap" style="margin-top:8px;"><div class="pb" style="background:${gc};width:${Math.min(gp,100)}%"></div></div>`:''}</div><div style="display:flex;flex-direction:column;gap:7px;">${personen.map(p=>{const pp=ziel>0?Math.round(p.stueck/ziel*100):null,pc=pp===null?'var(--ac)':pp>=100?'var(--gr)':pp>=75?'var(--or)':'var(--re)';return`<div class="li"><div class="li-info"><div class="tt" style="gap:6px;">${p.name} ${pp!==null?`<span class="badge" style="background:${pc}22;color:${pc}">${pp}%</span>`:''}</div><div class="st">${p.stueck} Stk${ziel>0?' · Ziel: '+ziel:''} · ${((p.stueck/zeit)*60).toFixed(1)} Stk/h</div>${pp!==null?`<div class="pb-wrap" style="margin-top:5px;"><div class="pb" style="background:${pc};width:${Math.min(pp,100)}%"></div></div>`:''}</div></div>`;}).join('')}</div>`;document.getElementById('leistungResult').style.display='block';const list=L('leistungen');list.unshift({id:Date.now(),datum:datum||new Date().toISOString().split('T')[0],schichtTyp:CLT,bereich,personen,gs,gph:Math.round(gph),zeit,ziel,gp});S('leistungen',list);renderLeistungH();toast('Leistung gespeichert ');}
 function delLeistung(id){S('leistungen',L('leistungen').filter(l=>l.id!==id));renderLeistungH();}
 function filterLeistung(f,btn){CLF=f;document.querySelectorAll('#tab-leistung .sf-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderLeistungH();}
-function renderLeistungH(){let list=L('leistungen').sort((a,b)=>new Date(b.datum)-new Date(a.datum));if(CLF!=='alle')list=list.filter(l=>l.schichtTyp===CLF);const el=document.getElementById('leistungHistorie');if(!list.length){el.innerHTML='<div class="empty"><div class="icon">📊</div>Noch keine Einträge.</div>';return;}el.innerHTML=list.map(l=>{const pb=l.gp!=null?`<span class="badge ${l.gp>=100?'bg':l.gp>=75?'bo':'br'}">${l.gp}%</span>`:'';return`<div class="li"><div class="li-info"><div class="tt">${stb(l.schichtTyp)} ${fd(l.datum)} ${pb}</div><div class="st">${l.personen.map(p=>{const pp=l.ziel>0?Math.round(p.stueck/l.ziel*100):null;return`${p.name}: ${p.stueck}${pp!=null?' ('+pp+'%)':''}`;}).join(' · ')}</div></div><button class="btn-d" onclick="delLeistung(${l.id})">✕</button></div>`;}).join('');}
+function renderLeistungH(){let list=L('leistungen').sort((a,b)=>new Date(b.datum)-new Date(a.datum));if(CLF!=='alle')list=list.filter(l=>l.schichtTyp===CLF);const el=document.getElementById('leistungHistorie');if(!list.length){el.innerHTML='<div class="empty"><div class="icon"></div>Noch keine Einträge.</div>';return;}el.innerHTML=list.map(l=>{const pb=l.gp!=null?`<span class="badge ${l.gp>=100?'bg':l.gp>=75?'bo':'br'}">${l.gp}%</span>`:'';return`<div class="li"><div class="li-info"><div class="tt">${stb(l.schichtTyp)} ${fd(l.datum)} ${pb}</div><div class="st">${l.personen.map(p=>{const pp=l.ziel>0?Math.round(p.stueck/l.ziel*100):null;return`${p.name}: ${p.stueck}${pp!=null?' ('+pp+'%)':''}`;}).join(' · ')}</div></div><button class="btn-d" onclick="delLeistung(${l.id})"></button></div>`;}).join('');}
 
 // ── STÜCKLISTE ──
-function addRzZutat(n='',m='',e=''){rzCnt++;const wrap=document.getElementById('rzWrap'),div=document.createElement('div');div.className='rz-row';div.id='rz_'+rzCnt;div.innerHTML=`<input type="text" placeholder="Material" value="${n}" style="flex:1;"><input type="number" class="qi" placeholder="Menge" min="0" step=".01" value="${m}"><input type="text" class="ui" placeholder="Einheit" value="${e}"><button class="btn-d" onclick="this.parentElement.remove()">✕</button>`;wrap.appendChild(div);}
+function addRzZutat(n='',m='',e=''){rzCnt++;const wrap=document.getElementById('rzWrap'),div=document.createElement('div');div.className='rz-row';div.id='rz_'+rzCnt;div.innerHTML=`<input type="text" placeholder="Material" value="${n}" style="flex:1;"><input type="number" class="qi" placeholder="Menge" min="0" step=".01" value="${m}"><input type="text" class="ui" placeholder="Einheit" value="${e}"><button class="btn-d" onclick="this.parentElement.remove()"></button>`;wrap.appendChild(div);}
 function initRzRows(){document.getElementById('rzWrap').innerHTML='';rzCnt=0;addRzZutat();}
 function getRzZutaten(){const rows=document.querySelectorAll('#rzWrap .rz-row'),z=[];rows.forEach(r=>{const i=r.querySelectorAll('input');const n=(i[0]?i[0].value.trim():''),m=parseFloat((i[1]?i[1].value:0))||0,e=(i[2]?i[2].value.trim():'')||'Stk';if(n&&m>0)z.push({name:n,menge:m,einheit:e});});return z;}
-function berechneRezept(){const pr=document.getElementById('rzProdukt').value.trim(),anz=parseInt(document.getElementById('rzAnzahl').value)||1,z=getRzZutaten();if(!pr){toast('Produktname eingeben.','err');return;}if(!z.length){toast('Material hinzufügen.','err');return;}document.getElementById('rzAnzahlLbl').textContent=anz;document.getElementById('rzBody').innerHTML=z.map(zi=>`<tr><td>${zi.name}</td><td>${zi.menge} ${zi.einheit}</td><td>${(zi.menge*anz).toLocaleString('de-DE')} ${zi.einheit}</td></tr>`).join('');const zPS=parseFloat(document.getElementById('rzZeit').value)||0,sH=parseFloat(document.getElementById('rzSchicht').value)||8,maBox=document.getElementById('rzMaBox');if(zPS>0){const gm=anz*zPS,sm=sH*60,mab=Math.ceil(gm/sm),sph=Math.floor(sm/zPS);maBox.innerHTML=`<div class="ma-box"><div style="font-size:11px;color:var(--tx2);margin-bottom:6px;text-transform:uppercase;">👷 Mitarbeiterbedarf</div><div class="mav">${mab}</div><div class="mal">Mitarbeiter benötigt</div><div class="mad">Für <strong>${anz} Stk</strong> à <strong>${zPS} Min.</strong> = <strong>${(gm/60).toFixed(1)} Std.</strong><br>Schicht: <strong>${sH}h</strong> · ${sph} Stk/MA/Schicht</div></div>`;}else maBox.innerHTML='';document.getElementById('rzResult').style.display='block';}
-function saveRezept(){const pr=document.getElementById('rzProdukt').value.trim(),z=getRzZutaten(),zPS=parseFloat(document.getElementById('rzZeit').value)||0,sH=parseFloat(document.getElementById('rzSchicht').value)||8;if(!pr||!z.length){toast('Produkt + Material eingeben.','err');return;}const l=L('stueckliste');l.unshift({id:Date.now(),produkt:pr,zutaten:z,zeitProStueck:zPS,schichtStunden:sH});S('stueckliste',l);renderStueckL();toast('Stückliste gespeichert ✓');}
+function berechneRezept(){const pr=document.getElementById('rzProdukt').value.trim(),anz=parseInt(document.getElementById('rzAnzahl').value)||1,z=getRzZutaten();if(!pr){toast('Produktname eingeben.','err');return;}if(!z.length){toast('Material hinzufügen.','err');return;}document.getElementById('rzAnzahlLbl').textContent=anz;document.getElementById('rzBody').innerHTML=z.map(zi=>`<tr><td>${zi.name}</td><td>${zi.menge} ${zi.einheit}</td><td>${(zi.menge*anz).toLocaleString('de-DE')} ${zi.einheit}</td></tr>`).join('');const zPS=parseFloat(document.getElementById('rzZeit').value)||0,sH=parseFloat(document.getElementById('rzSchicht').value)||8,maBox=document.getElementById('rzMaBox');if(zPS>0){const gm=anz*zPS,sm=sH*60,mab=Math.ceil(gm/sm),sph=Math.floor(sm/zPS);maBox.innerHTML=`<div class="ma-box"><div style="font-size:11px;color:var(--tx2);margin-bottom:6px;text-transform:uppercase;">Mitarbeiterbedarf</div><div class="mav">${mab}</div><div class="mal">Mitarbeiter benötigt</div><div class="mad">Für <strong>${anz} Stk</strong> à <strong>${zPS} Min.</strong> = <strong>${(gm/60).toFixed(1)} Std.</strong><br>Schicht: <strong>${sH}h</strong> · ${sph} Stk/MA/Schicht</div></div>`;}else maBox.innerHTML='';document.getElementById('rzResult').style.display='block';}
+function saveRezept(){const pr=document.getElementById('rzProdukt').value.trim(),z=getRzZutaten(),zPS=parseFloat(document.getElementById('rzZeit').value)||0,sH=parseFloat(document.getElementById('rzSchicht').value)||8;if(!pr||!z.length){toast('Produkt + Material eingeben.','err');return;}const l=L('stueckliste');l.unshift({id:Date.now(),produkt:pr,zutaten:z,zeitProStueck:zPS,schichtStunden:sH});S('stueckliste',l);renderStueckL();toast('Stückliste gespeichert ');}
 function delStueck(id){S('stueckliste',L('stueckliste').filter(s=>s.id!==id));renderStueckL();}
-function loadRezept(id){const item=L('stueckliste').find(s=>s.id===id);if(!item)return;document.getElementById('rzProdukt').value=item.produkt;document.getElementById('rzWrap').innerHTML='';rzCnt=0;item.zutaten.forEach(z=>addRzZutat(z.name,z.menge,z.einheit));if(item.zeitProStueck)document.getElementById('rzZeit').value=item.zeitProStueck;if(item.schichtStunden)document.getElementById('rzSchicht').value=item.schichtStunden;toast(`"${item.produkt}" geladen ✓`);document.querySelector('[data-tab=stueckliste]').click();}
-function renderStueckL(){const list=L('stueckliste');const el=document.getElementById('stueckListe');if(!el)return;if(!list.length){el.innerHTML='<div class="empty"><div class="icon">📦</div>Noch keine Listen.</div>';return;}const dl=document.getElementById('dlProdukte');if(dl)dl.innerHTML=list.map(s=>`<option value="${s.produkt}">`).join('');el.innerHTML=list.map(s=>{
+function loadRezept(id){const item=L('stueckliste').find(s=>s.id===id);if(!item)return;document.getElementById('rzProdukt').value=item.produkt;document.getElementById('rzWrap').innerHTML='';rzCnt=0;item.zutaten.forEach(z=>addRzZutat(z.name,z.menge,z.einheit));if(item.zeitProStueck)document.getElementById('rzZeit').value=item.zeitProStueck;if(item.schichtStunden)document.getElementById('rzSchicht').value=item.schichtStunden;toast(`"${item.produkt}" geladen `);document.querySelector('[data-tab=stueckliste]').click();}
+function renderStueckL(){const list=L('stueckliste');const el=document.getElementById('stueckListe');if(!el)return;if(!list.length){el.innerHTML='<div class="empty"><div class="icon"></div>Noch keine Listen.</div>';return;}const dl=document.getElementById('dlProdukte');if(dl)dl.innerHTML=list.map(s=>`<option value="${s.produkt}">`).join('');el.innerHTML=list.map(s=>{
   const zPS=s.zeitProStueck||0,sH=s.schichtStunden||8;
   let maInfo='';
   if(zPS>0){
@@ -1173,14 +1300,14 @@ function renderStueckL(){const list=L('stueckliste');const el=document.getElemen
     const sph=Math.floor(sm/zPS);
     const ma1=Math.ceil(zPS/sm); // 1 MA wie viel in einer Schicht
     maInfo=`<div style="background:rgba(34,212,200,.08);border:1px solid rgba(34,212,200,.25);border-radius:6px;padding:6px 10px;margin-top:6px;font-size:11px;">
-      <span style="color:var(--te);font-weight:700;">👷 ${sph} Stk/MA/Schicht</span>
+      <span style="color:var(--te);font-weight:700;">${sph} Stk/MA/Schicht</span>
       <span style="color:var(--tx2);margin-left:8px;">bei ${sH}h Schicht · ${zPS} Min./Stk</span>
     </div>`;
   }
   return`<div class="li" style="flex-direction:column;align-items:flex-start;gap:4px;">
     <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
       <div class="tt">${s.produkt}${zPS?` <span class="badge bt">⏱ ${zPS} Min./Stk</span>`:''}</div>
-      <div style="display:flex;gap:5px;"><button class="btn btn-o btn-sm" onclick="loadRezept(${s.id})">📂</button><button class="btn-d" onclick="delStueck(${s.id})">✕</button></div>
+      <div style="display:flex;gap:5px;"><button class="btn btn-o btn-sm" onclick="loadRezept(${s.id})"></button><button class="btn-d" onclick="delStueck(${s.id})"></button></div>
     </div>
     <div class="st">${s.zutaten.map(z=>`${z.menge}× ${z.name}`).join(' · ')}</div>
     ${maInfo}
@@ -1191,7 +1318,7 @@ function renderStueckL(){const list=L('stueckliste');const el=document.getElemen
 function getRetProdukte(){return L('ret_produkte',['Standard']);}
 function setRetProdukte(p){S('ret_produkte',p);}
 function addRetProdukt(){const v=document.getElementById('retNewProd').value.trim();if(!v)return;const p=getRetProdukte();if(p.includes(v)){toast('Produkt bereits vorhanden.','err');return;}p.push(v);setRetProdukte(p);document.getElementById('retNewProd').value='';retAktProdukt=v;renderRetProdTabs();renderAlleProdukte();}
-function delRetProdukt(){if(retAktProdukt==='Standard'){toast('Standard-Produkt kann nicht gelöscht werden.','err');return;}showConfirm('Produkt löschen',`"${retAktProdukt}" und alle zugehörigen Verlauf-Einträge löschen?`,'Löschen',()=>{let p=getRetProdukte().filter(x=>x!==retAktProdukt);if(!p.length)p=['Standard'];setRetProdukte(p);S('retouren_verlauf',L('retouren_verlauf').filter(r=>r.produkt!==retAktProdukt));retAktProdukt=p[0];renderRetProdTabs();renderAlleProdukte();renderRetH();toast('Produkt gelöscht ✓');});}
+function delRetProdukt(){if(retAktProdukt==='Standard'){toast('Standard-Produkt kann nicht gelöscht werden.','err');return;}showConfirm('Produkt löschen',`"${retAktProdukt}" und alle zugehörigen Verlauf-Einträge löschen?`,'Löschen',()=>{let p=getRetProdukte().filter(x=>x!==retAktProdukt);if(!p.length)p=['Standard'];setRetProdukte(p);S('retouren_verlauf',L('retouren_verlauf').filter(r=>r.produkt!==retAktProdukt));retAktProdukt=p[0];renderRetProdTabs();renderAlleProdukte();renderRetH();toast('Produkt gelöscht ');});}
 function renderRetProdTabs(){const prods=getRetProdukte();const el=document.getElementById('retProdTabs');if(!el)return;if(!prods.includes(retAktProdukt))retAktProdukt=prods[0]||'Standard';el.innerHTML=prods.map(p=>`<div class="prod-tab${p===retAktProdukt?' active':''}" onclick="switchRetProdukt('${p.replace(/'/g,"\\'")}')">${p}</div>`).join('');const lbl=document.getElementById('retAktProdLbl');if(lbl)lbl.textContent=retAktProdukt;const hlbl=document.getElementById('retHistorieProdLbl');if(hlbl)hlbl.textContent=retAktProdukt;renderRetH();}
 function switchRetProdukt(p){retAktProdukt=p;renderRetProdTabs();}
 function toggleRetDatum(){document.getElementById('retDatumFelder').style.display=document.getElementById('retZeitraum').value==='datum'?'block':'none';}
@@ -1208,11 +1335,11 @@ function calcAusschussLive(){
     const repPct=(rep/prod*100).toFixed(1);
     const kapPct=(kap/prod*100).toFixed(1);
     const gesPct=(ges/prod*100).toFixed(1);
-    info.innerHTML=`🔧 Nachbesserung: ${rep} Stk (${repPct}%) · 💀 Defekt: ${kap} Stk (${kapPct}%) · Gesamt-Ausschuss: <strong>${ges} Stk (${gesPct}%)</strong>`;
+    info.innerHTML=`Nachbesserung: ${rep} Stk (${repPct}%) ·  Defekt: ${kap} Stk (${kapPct}%) · Gesamt-Ausschuss: <strong>${ges} Stk (${gesPct}%)</strong>`;
   } else { info.style.display='none'; }
 }
 
-function getAmpel(rekPct){if(rekPct<3)return{cls:'ampel-gruen',label:'🟢 Gut – Retourenquote im grünen Bereich (< 3%)'};if(rekPct<8)return{cls:'ampel-gelb',label:'🟡 Achtung – Erhöhte Retourenquote (3–8%)'};return{cls:'ampel-rot',label:'🔴 Kritisch – Hohe Retourenquote (> 8%)! Maßnahmen erforderlich'};}
+function getAmpel(rekPct){if(rekPct<3)return{cls:'ampel-gruen',label:'● Gut – Retourenquote im grünen Bereich (< 3%)'};if(rekPct<8)return{cls:'ampel-gelb',label:'● Achtung – Erhöhte Retourenquote (3–8%)'};return{cls:'ampel-rot',label:'● Kritisch – Hohe Retourenquote (> 8%)! Maßnahmen erforderlich'};}
 
 function berechneRetouren(){
   const prod=parseFloat(document.getElementById('retProd').value)||0;
@@ -1224,9 +1351,9 @@ function berechneRetouren(){
   if(!vers&&!zurueck&&!prod){toast('Bitte Produktionsdaten eingeben.','err');return;}
   const warnEl=document.getElementById('retValidWarn');
   let warns=[];
-  if(vers>prod&&prod>0)warns.push('⚠ Versendete Menge größer als produzierte Menge.');
-  if(zurueck>vers&&vers>0)warns.push('⚠ Reklamierte Menge größer als versendete Menge.');
-  if(fw>prod&&prod>0)warns.push('⚠ Ausschuss größer als produzierte Menge.');
+  if(vers>prod&&prod>0)warns.push(' Versendete Menge größer als produzierte Menge.');
+  if(zurueck>vers&&vers>0)warns.push(' Reklamierte Menge größer als versendete Menge.');
+  if(fw>prod&&prod>0)warns.push(' Ausschuss größer als produzierte Menge.');
   if(warns.length){warnEl.style.display='block';warnEl.innerHTML=warns.join('<br>');}else{warnEl.style.display='none';}
   const repPct=prod>0?(rep/prod*100):0;
   const kapPct=prod>0?(kap/prod*100):0;
@@ -1280,20 +1407,20 @@ function berechneBearbeitung(){
   document.getElementById('retBearbResult').innerHTML=`
     <div class="rgrid" style="margin-top:0;grid-template-columns:1fr 1fr 1fr;">
       <div class="ri"><div class="v vb">${lager}</div><div class="l">Im Lager</div></div>
-      <div class="ri"><div class="v vg">${ok}</div><div class="l">✅ OK</div></div>
-      <div class="ri"><div class="v vr">${defekt}</div><div class="l">💀 Defekt</div></div>
+      <div class="ri"><div class="v vg">${ok}</div><div class="l">OK</div></div>
+      <div class="ri"><div class="v vr">${defekt}</div><div class="l"> Defekt</div></div>
     </div>
     <div style="background:rgba(162,89,255,.1);border:1px solid rgba(162,89,255,.3);border-radius:var(--rs);padding:10px;margin-top:10px;text-align:center;">
       <div style="font-size:11px;color:var(--tx2);margin-bottom:4px;font-family:monospace;">${lager} − ${ok} − ${defekt} = <strong>${offen}</strong></div>
-      <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:${offen>0?'var(--re)':'var(--gr)'};">${offen}</div>
-      <div style="font-size:12px;color:var(--tx2);">${offen>0?'Stk noch offen im Lager':'Alle bearbeitet ✅'}</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:800;color:${offen>0?'var(--re)':'var(--gr)'};">${offen}</div>
+      <div style="font-size:12px;color:var(--tx2);">${offen>0?'Stk noch offen im Lager':'Alle bearbeitet '}</div>
     </div>
-    ${fehlergrund?`<div style="background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.3);border-radius:var(--rs);padding:8px 12px;margin-top:8px;font-size:12px;"><span style="color:var(--or);font-weight:700;">⚠️ Fehlergrund (Produktion):</span> ${fehlergrund}</div>`:''}
-    ${vollstaendig?'':'<div style="background:rgba(240,80,110,.1);border:1px solid rgba(240,80,110,.3);border-radius:var(--rs);padding:10px;margin-top:8px;font-size:12px;color:var(--re);text-align:center;">⚠️ Noch '+offen+' Reklamationen offen im Lager!</div>'}`;
+    ${fehlergrund?`<div style="background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.3);border-radius:var(--rs);padding:8px 12px;margin-top:8px;font-size:12px;"><span style="color:var(--or);font-weight:700;">Fehlergrund (Produktion):</span> ${fehlergrund}</div>`:''}
+    ${vollstaendig?'':'<div style="background:rgba(240,80,110,.1);border:1px solid rgba(240,80,110,.3);border-radius:var(--rs);padding:10px;margin-top:8px;font-size:12px;color:var(--re);text-align:center;">Noch '+offen+' Reklamationen offen im Lager!</div>'}`;
 
   document.getElementById('retBearbResult').style.display='block';
   document.getElementById('retStatusBadge').className='ret-status '+(vollstaendig?'ret-bearbeitet':'ret-offen');
-  document.getElementById('retStatusBadge').textContent=vollstaendig?'✅ Bearbeitet':'⏳ '+offen+' Offen';
+  document.getElementById('retStatusBadge').textContent=vollstaendig?'Bearbeitet':'⏳ '+offen+' Offen';
 
   if(lastRet){
     lastRet.bearbeitet=lager;
@@ -1305,7 +1432,7 @@ function berechneBearbeitung(){
   }
 }
 function renderRetVergleich(prod,vers,zurueck,fw){const hist=L('retouren_verlauf').filter(r=>r.produkt===retAktProdukt);const el=document.getElementById('retVergleich');if(!hist.length){el.style.display='none';return;}const last=hist[0];el.style.display='block';const dVers=vers-last.vers,dZurueck=zurueck-last.zurueck,dAus=fw-(last.fw||0);document.getElementById('retVergleichInner').innerHTML=`<div style="font-size:11px;color:var(--tx2);margin-bottom:8px;">Vergleich mit: <strong>${last.zeitraum}</strong> (${last.datum})</div><div class="rgrid"><div class="ri"><div class="v ${dVers>=0?'vg':'vr'}" style="font-size:14px;">${dVers>=0?'+':''}${dVers.toLocaleString('de-DE')}</div><div class="l">Versand Δ</div></div><div class="ri"><div class="v ${dZurueck<=0?'vg':'vr'}" style="font-size:14px;">${dZurueck>=0?'+':''}${dZurueck.toLocaleString('de-DE')}</div><div class="l">Retouren Δ</div></div><div class="ri"><div class="v ${dAus<=0?'vg':'vr'}" style="font-size:14px;">${dAus>=0?'+':''}${dAus.toLocaleString('de-DE')}</div><div class="l">Ausschuss Δ</div></div></div>`;}
-function saveRetEintrag(){if(!lastRet){toast('Erst analysieren!','err');return;}const list=L('retouren_verlauf');list.unshift({id:Date.now(),...lastRet});S('retouren_verlauf',list);renderRetH();renderAlleProdukte();toast('Gespeichert ✓');}
+function saveRetEintrag(){if(!lastRet){toast('Erst analysieren!','err');return;}const list=L('retouren_verlauf');list.unshift({id:Date.now(),...lastRet});S('retouren_verlauf',list);renderRetH();renderAlleProdukte();toast('Gespeichert ');}
 function delRetEintrag(id){S('retouren_verlauf',L('retouren_verlauf').filter(r=>r.id!==id));renderRetH();renderAlleProdukte();}
 
 function renderAlleProdukte(){
@@ -1319,7 +1446,7 @@ function renderAlleProdukte(){
     const last=entries[0];
     const rekPctNum=parseFloat(last.rekPct)||0;
     const ampelCls=rekPctNum<3?'vg':rekPctNum<8?'vo':'vr';
-    const ampelDot=rekPctNum<3?'🟢':rekPctNum<8?'🟡':'🔴';
+    const ampelDot=rekPctNum<3?'●':rekPctNum<8?'●':'●';
     const totalVers=entries.reduce((s,r)=>s+(r.vers||0),0);
     const totalRek=entries.reduce((s,r)=>s+(r.zurueck||0),0);
     // Offen = nur anzeigen wenn Bearbeitung gespeichert wurde (bearbeitet-Felder vorhanden)
@@ -1328,16 +1455,16 @@ function renderAlleProdukte(){
     const offenTxt=offenAnzahl!=null?offenAnzahl+' Stk':'noch nicht bearbeitet';
     const offenFarbe=offenAnzahl==null?'var(--tx3)':offenAnzahl>0?'var(--re)':'var(--gr)';
     return`<div class="prod-kpi-card" style="grid-column:span 2;">
-      <div class="pkn"><span>📦 ${p}</span><span>${ampelDot} ${last.rekPct}% Rekl.</span></div>
+      <div class="pkn"><span>${p}</span><span>${ampelDot} ${last.rekPct}% Rekl.</span></div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:4px;">
         <div><div class="pkv vb">${(last.prod||0).toLocaleString('de-DE')}</div><div class="pks">Produziert</div></div>
-        <div><div class="pkv vo">${(last.rep||0).toLocaleString('de-DE')} <span style="font-size:9px;">(${last.repPct||0}%)</span></div><div class="pks">🔧 Nachbesserung</div></div>
-        <div><div class="pkv vr">${(last.kap||0).toLocaleString('de-DE')} <span style="font-size:9px;">(${last.kapPct||0}%)</span></div><div class="pks">💀 Defekt</div></div>
+        <div><div class="pkv vo">${(last.rep||0).toLocaleString('de-DE')} <span style="font-size:9px;">(${last.repPct||0}%)</span></div><div class="pks">Nachbesserung</div></div>
+        <div><div class="pkv vr">${(last.kap||0).toLocaleString('de-DE')} <span style="font-size:9px;">(${last.kapPct||0}%)</span></div><div class="pks"> Defekt</div></div>
         <div><div class="pkv vt">${(last.vers||0).toLocaleString('de-DE')}</div><div class="pks">Versendet</div></div>
-        <div><div class="pkv ${ampelCls}">${(last.zurueck||0).toLocaleString('de-DE')}</div><div class="pks">🏷 Reklamiert</div></div>
-        <div><div class="pkv" style="color:${offenFarbe};font-weight:800;">${offenTxt}</div><div class="pks">🔓 Im Lager offen</div></div>
+        <div><div class="pkv ${ampelCls}">${(last.zurueck||0).toLocaleString('de-DE')}</div><div class="pks"> Reklamiert</div></div>
+        <div><div class="pkv" style="color:${offenFarbe};font-weight:800;">${offenTxt}</div><div class="pks"> Im Lager offen</div></div>
       </div>
-      ${hatBearbeitung?`<div style="font-size:10px;color:var(--tx3);margin-top:4px;">✅ Bearbeitet: ${last.bearbeitet||0} (OK: ${last.ausschussRep||0} · Defekt: ${last.ausschussKap||0})</div>`:'<div style="font-size:10px;color:var(--tx3);margin-top:4px;">⏳ Noch keine Bearbeitung erfasst</div>'}
+      ${hatBearbeitung?`<div style="font-size:10px;color:var(--tx3);margin-top:4px;">Bearbeitet: ${last.bearbeitet||0} (OK: ${last.ausschussRep||0} · Defekt: ${last.ausschussKap||0})</div>`:'<div style="font-size:10px;color:var(--tx3);margin-top:4px;">⏳ Noch keine Bearbeitung erfasst</div>'}
       <div style="margin-top:4px;font-size:10px;color:var(--tx3);">${entries.length} Einträge · Gesamt: ${totalVers.toLocaleString('de-DE')} versandt, ${totalRek.toLocaleString('de-DE')} reklamiert · Letzter: ${last.datum}</div>
       <div class="pb-wrap" style="margin-top:6px;"><div class="pb" style="background:${rekPctNum<3?'var(--gr)':rekPctNum<8?'var(--ye)':'var(--re)'};width:${Math.min(rekPctNum*10,100)}%"></div></div>
     </div>`;
@@ -1350,26 +1477,26 @@ function renderRetH(){
   if(!list.length){el.innerHTML='<div class="empty"><div class="icon">↩</div>Noch kein Verlauf.</div>';return;}
   el.innerHTML=list.map(r=>{
     const rekPctNum=parseFloat(r.rekPct)||0;
-    const ampelDot=rekPctNum<3?'🟢':rekPctNum<8?'🟡':'🔴';
-    const repTxt=r.repPct?` · 🔧 Nachb.: ${r.repPct}%`:'';
-    const kapTxt=r.kapPct?` · 💀 Def.: ${r.kapPct}%`:'';
+    const ampelDot=rekPctNum<3?'●':rekPctNum<8?'●':'●';
+    const repTxt=r.repPct?` · Nachb.: ${r.repPct}%`:'';
+    const kapTxt=r.kapPct?` ·  Def.: ${r.kapPct}%`:'';
     // Reklamiert (gelb markiert) – immer anzeigen
-    const reklTxt=`<span style="color:var(--ye);font-weight:700;"> · 🏷 Rekl.: ${r.zurueck||0} Stk</span>`;
+    const reklTxt=`<span style="color:var(--ye);font-weight:700;"> ·  Rekl.: ${r.zurueck||0} Stk</span>`;
     // Lager-Offen – NUR wenn Bearbeitung vorhanden
     const hatBearbeitung=r.bearbeitet!=null&&r.bearbeitet>0;
     let offenTxt='';
     if(hatBearbeitung){
       const offen=r.offen!=null?r.offen:Math.max(0,(r.bearbeitet||0)-(r.ausschussRep||0)-(r.ausschussKap||0));
-      offenTxt=`<span style="color:${offen>0?'var(--re)':'var(--gr)'};font-weight:700;"> · 🔓 Lager offen: ${offen} Stk</span>`;
+      offenTxt=`<span style="color:${offen>0?'var(--re)':'var(--gr)'};font-weight:700;"> ·  Lager offen: ${offen} Stk</span>`;
     } else {
       offenTxt=`<span style="color:var(--tx3);font-size:10px;"> · ⏳ Bearbeitung ausstehend</span>`;
     }
-    const fehlerTxt=r.fehlergrund?`<div style="margin-top:3px;font-size:11px;color:var(--or);">⚠️ Fehlergrund: <strong>${r.fehlergrund}</strong></div>`:'';
+    const fehlerTxt=r.fehlergrund?`<div style="margin-top:3px;font-size:11px;color:var(--or);">Fehlergrund: <strong>${r.fehlergrund}</strong></div>`:'';
     return`<div class="li"><div class="li-info">
-      <div class="tt">${r.produkt?`<span class="badge bb">${r.produkt}</span> `:''}${r.zeitraum} <span class="ret-status ${r.status==='bearbeitet'?'ret-bearbeitet':'ret-offen'}" style="font-size:10px;padding:2px 8px;">${r.status==='bearbeitet'?'✅ Bearb.':'⏳ Offen'}</span></div>
+      <div class="tt">${r.produkt?`<span class="badge bb">${r.produkt}</span> `:''}${r.zeitraum} <span class="ret-status ${r.status==='bearbeitet'?'ret-bearbeitet':'ret-offen'}" style="font-size:10px;padding:2px 8px;">${r.status==='bearbeitet'?'Bearb.':'⏳ Offen'}</span></div>
       <div class="st">${ampelDot} Versandt: ${(r.vers||0).toLocaleString('de-DE')}${reklTxt}${repTxt}${kapTxt}${offenTxt}</div>
       ${fehlerTxt}
-    </div><button class="btn-d" onclick="delRetEintrag(${r.id})">✕</button></div>`;
+    </div><button class="btn-d" onclick="delRetEintrag(${r.id})"></button></div>`;
   }).join('');
 }
 
@@ -1426,13 +1553,13 @@ function liveOffenCalc(){
   if(formel)formel.textContent=
     `Im Lager: ${lager}  −  Bearbeitet OK: ${ok}  −  Defekt: ${defekt}  =  Offen: ${offen}`;
   if(val){
-    val.textContent=offen>0?offen+' Stk noch offen':'✅ Alle bearbeitet!';
+    val.textContent=offen>0?offen+' Stk noch offen':'Alle bearbeitet!';
     val.style.color=offen>0?'var(--re)':'var(--gr)';
   }
   if(warn){
     const summe=ok+defekt;
     if(summe>lager){
-      warn.textContent='⚠️ OK ('+ok+') + Defekt ('+defekt+') = '+summe+' > Im Lager ('+lager+')!';
+      warn.textContent='OK ('+ok+') + Defekt ('+defekt+') = '+summe+' > Im Lager ('+lager+')!';
       warn.style.display='block';
     } else {
       warn.style.display='none';
@@ -1451,7 +1578,7 @@ function addQualifikation(){
   list.push({id:Date.now(),ma,typ,bis,notiz});
   SG('qualifikationen',list);
   document.getElementById('qualMA').value='';document.getElementById('qualBis').value='';document.getElementById('qualNotiz').value='';
-  renderQualMatrix();toast('Qualifikation gespeichert ✓');
+  renderQualMatrix();toast('Qualifikation gespeichert ');
 }
 function delQualifikation(id){
   SG('qualifikationen',LG('qualifikationen',[]).filter(q=>q.id!==id));
@@ -1460,22 +1587,22 @@ function delQualifikation(id){
 function renderQualMatrix(){
   const el=document.getElementById('qualMatrix');if(!el)return;
   const list=LG('qualifikationen',[]);
-  if(!list.length){el.innerHTML='<div class="empty"><div class="icon">🎓</div>Noch keine Qualifikationen.</div>';return;}
+  if(!list.length){el.innerHTML='<div class="empty"><div class="icon"></div>Noch keine Qualifikationen.</div>';return;}
   const byMA={};
   list.forEach(q=>{if(!byMA[q.ma])byMA[q.ma]=[];byMA[q.ma].push(q);});
   const today=new Date().toISOString().split('T')[0];
-  const icons={Staplerschein:'🚜',Ersthelfer:'🩺',Gefahrgut:'⚠️',Brandschutz:'🔥',Schichtleiter:'👔',Qualitätsprüfer:'🔍',Sonstiges:'📋'};
+  const icons={Staplerschein:'',Ersthelfer:'',Gefahrgut:'',Brandschutz:'',Schichtleiter:'',Qualitätsprüfer:'',Sonstiges:''};
   el.innerHTML=Object.entries(byMA).map(([name,quals])=>`
     <div class="li" style="flex-direction:column;align-items:flex-start;gap:6px;">
-      <div style="font-weight:700;font-size:13px;">👤 ${name}</div>
+      <div style="font-weight:700;font-size:13px;"> ${name}</div>
       <div style="display:flex;flex-wrap:wrap;gap:5px;">${quals.map(q=>{
         const expired=q.bis&&q.bis<today;
         const soon=q.bis&&!expired&&q.bis<=new Date(Date.now()+30*86400000).toISOString().split('T')[0];
         const col=expired?'var(--re)':soon?'var(--ye)':'var(--gr)';
         return`<div style="background:${col}18;border:1px solid ${col}55;border-radius:8px;padding:4px 9px;font-size:11px;display:inline-flex;align-items:center;gap:5px;">
-          <span>${icons[q.typ]||'📋'} ${q.typ}</span>
-          ${q.bis?`<span style="color:${col};font-size:10px;">${expired?'❌':soon?'⚠️':'✅'} ${q.bis}</span>`:''}
-          <button onclick="delQualifikation(${q.id})" style="background:none;border:none;color:var(--re);cursor:pointer;font-size:11px;padding:0 2px;">✕</button>
+          <span>${icons[q.typ]||''} ${q.typ}</span>
+          ${q.bis?`<span style="color:${col};font-size:10px;">${expired?'×':soon?'':''} ${q.bis}</span>`:''}
+          <button onclick="delQualifikation(${q.id})" style="background:none;border:none;color:var(--re);cursor:pointer;font-size:11px;padding:0 2px;"></button>
         </div>`;
       }).join('')}</div>
     </div>`).join('');
@@ -1538,7 +1665,7 @@ function addAbwesenheit(){
   document.getElementById('abwVon').value='';
   document.getElementById('abwBis').value='';
   renderAbwList(); renderUrlaubL(); renderUrlaubR(); renderWochenplan();
-  toast(art+' für '+name+' eingetragen ✓');
+  toast(art+' für '+name+' eingetragen ');
 }
 function renderAbwList(){
   const el=document.getElementById('abwList');
@@ -1555,16 +1682,16 @@ function renderAbwList(){
     }
   }
   if(!list.length){el.innerHTML='<div style="font-size:11px;color:var(--tx3);">Keine Abwesenheiten diese Woche.</div>';return;}
-  const artIcon={Urlaub:'🏖',Krank:'🤒',Sonstiges:'📋'};
+  const artIcon={Urlaub:'',Krank:'',Sonstiges:''};
   el.innerHTML=list.map(u=>{
-    const icon=artIcon[u.art||'Urlaub']||'🏖';
+    const icon=artIcon[u.art||'Urlaub']||'';
     const bis=u.bis&&u.bis!==u.von?` – ${fd(u.bis)}`:'';
     return`<div style="display:flex;align-items:center;justify-content:space-between;background:rgba(240,80,110,.08);border:1px solid rgba(240,80,110,.2);border-radius:var(--rs);padding:7px 10px;">
       <div>
         <span style="font-weight:700;font-size:12px;color:var(--re);">${icon} ${u.name}</span>
         <span style="font-size:11px;color:var(--tx2);margin-left:6px;">${u.art||'Urlaub'} · ${fd(u.von)}${bis}</span>
       </div>
-      <button class="btn-d" onclick="delAbwesenheit(${u.id})">✕</button>
+      <button class="btn-d" onclick="delAbwesenheit(${u.id})"></button>
     </div>`;
   }).join('');
 }
@@ -1598,7 +1725,7 @@ function renderWochenplan(){
   const kwVal=document.getElementById('wochenplanKW').value;
   const wrap=document.getElementById('wochenplanWrap');
   if(!kwVal){
-    wrap.innerHTML='<div class="empty"><div class="icon">📅</div>Kalenderwoche oben auswählen.</div>';
+    wrap.innerHTML='<div class="empty"><div class="icon"></div>Kalenderwoche oben auswählen.</div>';
     return;
   }
   const days=getWeekDatesFromKW(kwVal);
@@ -1611,13 +1738,13 @@ function renderWochenplan(){
 
   // Schichtkonfig: Farben wie auf Bild 2
   const schichtTypes=[
-    {typ:'Früh',   bg:'rgba(120,53,15,.85)',  border:'#f59e0b', hdr:'#78350f', hdrBg:'#fef3c7', hdrTx:'#78350f', emoji:'🌅'},
-    {typ:'Spät',   bg:'rgba(120,90,10,.85)',  border:'#f5c518', hdr:'#78640a', hdrBg:'#fefce8', hdrTx:'#78640a', emoji:'🌆'},
-    {typ:'Nacht',  bg:'rgba(59,7,100,.85)',   border:'#a855f7', hdr:'#3b0764', hdrBg:'#f3e8ff', hdrTx:'#6b21a8', emoji:'🌙'},
+    {typ:'Früh',   bg:'rgba(120,53,15,.85)',  border:'#f59e0b', hdr:'#78350f', hdrBg:'#fef3c7', hdrTx:'#78350f', emoji:''},
+    {typ:'Spät',   bg:'rgba(120,90,10,.85)',  border:'#f5c518', hdr:'#78640a', hdrBg:'#fefce8', hdrTx:'#78640a', emoji:''},
+    {typ:'Nacht',  bg:'rgba(59,7,100,.85)',   border:'#a855f7', hdr:'#3b0764', hdrBg:'#f3e8ff', hdrTx:'#6b21a8', emoji:''},
   ];
 
   let html=`
-  <div style="font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;color:var(--tx2);margin-bottom:6px;">
+  <div style="font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:700;color:var(--tx2);margin-bottom:6px;">
     Wocheneinsatzplan · Bereich: <span style="color:var(--ac);">${CA}</span> · KW ${kw} / ${yr}
     &nbsp;(${days[0].getDate()}.${days[0].getMonth()+1}. – ${days[6].getDate()}.${days[6].getMonth()+1}.${yr})
   </div>
@@ -1684,7 +1811,7 @@ function renderWochenplan(){
           const name=m.vn+' '+m.nn;
           if(!pers.includes(name)){
             content+=`<div style="background:rgba(6,78,59,.8);border:1px solid #10b981;border-radius:4px;padding:2px 5px;margin-bottom:3px;">
-              <div style="font-weight:700;font-size:10px;color:#6ee7b7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">🏖 ${name}</div>
+              <div style="font-weight:700;font-size:10px;color:#6ee7b7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${name}</div>
             </div>`;
           }
         });
@@ -1698,7 +1825,7 @@ function renderWochenplan(){
   html+=`<tr>
     <td style="padding:0;border:1px solid #334155;vertical-align:top;">
       <div style="background:#4a0404;color:#fca5a5;font-weight:800;font-size:10px;padding:5px 6px;text-align:center;border-bottom:2px solid #ef4444;">
-        🏖🤒<br>Abwes.
+        <br>Abwes.
       </div>
     </td>`;
   days.forEach(d=>{
@@ -1716,7 +1843,7 @@ function renderWochenplan(){
         const bg=isKrank?'rgba(180,20,20,.85)':'rgba(6,78,59,.85)';
         const border=isKrank?'#ef4444':'#10b981';
         const col=isKrank?'#fca5a5':'#6ee7b7';
-        const icon=isKrank?'🤒':'🏖';
+        const icon=isKrank?'':'';
         return`<div style="background:${bg};border:1px solid ${border};border-radius:4px;padding:2px 5px;margin-bottom:3px;">
           <div style="font-weight:700;font-size:10px;color:${col};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${icon} ${u.name}</div>
         </div>`;
@@ -1734,10 +1861,10 @@ function renderWochenplan(){
   const totalNacht=schichten.filter(s=>days.some(d=>d.toISOString().split('T')[0]===s.datum)&&s.schichtTyp==='Nacht').reduce((sum,s)=>sum+(s.personen||[]).length,0);
   const totalAbw=urlaube.filter(u=>days.some(d=>{const ds=d.toISOString().split('T')[0];return ds>=u.von&&ds<=(u.bis||u.von);})).length;
   html+=`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:11px;">
-    <span style="background:rgba(120,53,15,.3);border:1px solid #f59e0b;border-radius:12px;padding:3px 10px;color:#fcd34d;">🌅 ${totalFrüh} Früh</span>
-    <span style="background:rgba(120,90,10,.3);border:1px solid #f5c518;border-radius:12px;padding:3px 10px;color:#f5c518;">🌆 ${totalSpät} Spät</span>
-    <span style="background:rgba(59,7,100,.3);border:1px solid #a855f7;border-radius:12px;padding:3px 10px;color:#c084fc;">🌙 ${totalNacht} Nacht</span>
-    ${totalAbw?`<span style="background:rgba(127,29,29,.3);border:1px solid #ef4444;border-radius:12px;padding:3px 10px;color:#fca5a5;">🏖🤒 ${totalAbw} Abwesend</span>`:''}
+    <span style="background:rgba(120,53,15,.3);border:1px solid #f59e0b;border-radius:3px;padding:3px 10px;color:#fcd34d;">${totalFrüh} Früh</span>
+    <span style="background:rgba(120,90,10,.3);border:1px solid #f5c518;border-radius:3px;padding:3px 10px;color:#f5c518;">${totalSpät} Spät</span>
+    <span style="background:rgba(59,7,100,.3);border:1px solid #a855f7;border-radius:3px;padding:3px 10px;color:#c084fc;">${totalNacht} Nacht</span>
+    ${totalAbw?`<span style="background:rgba(127,29,29,.3);border:1px solid #ef4444;border-radius:3px;padding:3px 10px;color:#fca5a5;">${totalAbw} Abwesend</span>`:''}
   </div>`;
 
   // Abwesenheits-Liste aktualisieren
@@ -1751,15 +1878,15 @@ function buildWochenplanHTML(days,members,schichten,urlaube,forEmail){
   const kw=kwEl?kwEl.value.split('-W')[1]:'?';
   const yr=kwEl?kwEl.value.split('-W')[0]:'?';
   const schichtTypes=[
-    {typ:'Früh',  hdrBg:'#fef3c7',hdrTx:'#78350f',border:'#f59e0b',cellBg:'#fffbeb',nameBg:'#fef3c7',nameTx:'#78350f',emoji:'🌅 Frühschicht'},
-    {typ:'Spät',  hdrBg:'#fefce8',hdrTx:'#78640a',border:'#f5c518',cellBg:'#fffef0',nameBg:'#fefce8',nameTx:'#78640a',emoji:'🌆 Spätschicht'},
-    {typ:'Nacht', hdrBg:'#f3e8ff',hdrTx:'#6b21a8',border:'#a855f7',cellBg:'#faf5ff',nameBg:'#f3e8ff',nameTx:'#6b21a8',emoji:'🌙 Nachtschicht'},
+    {typ:'Früh',  hdrBg:'#fef3c7',hdrTx:'#78350f',border:'#f59e0b',cellBg:'#fffbeb',nameBg:'#fef3c7',nameTx:'#78350f',emoji:'Frühschicht'},
+    {typ:'Spät',  hdrBg:'#fefce8',hdrTx:'#78640a',border:'#f5c518',cellBg:'#fffef0',nameBg:'#fefce8',nameTx:'#78640a',emoji:'Spätschicht'},
+    {typ:'Nacht', hdrBg:'#f3e8ff',hdrTx:'#6b21a8',border:'#a855f7',cellBg:'#faf5ff',nameBg:'#f3e8ff',nameTx:'#6b21a8',emoji:'Nachtschicht'},
   ];
   const th=(t,bg='#1e3a5f',c='#fff',w='')=>`<th style="padding:8px 6px;border:1px solid #94a3b8;background:${bg};color:${c};font-size:11px;font-weight:700;text-align:center;${w}">${t}</th>`;
   let html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Wocheneinsatzplan KW${kw}</title></head>
   <body style="font-family:Arial,sans-serif;padding:20px;background:#f8fafc;">
   <div style="background:#1e3a5f;color:#fff;padding:14px 20px;border-radius:8px 8px 0 0;margin-bottom:0;">
-    <div style="font-size:18px;font-weight:800;">⚙ WOCHENEINSATZPLAN</div>
+    <div style="font-size:18px;font-weight:800;"> WOCHENEINSATZPLAN</div>
     <div style="font-size:12px;opacity:.8;margin-top:3px;">Bereich: ${CA} · KW ${kw} / ${yr} · (${days[0].getDate()}.${days[0].getMonth()+1}. – ${days[6].getDate()}.${days[6].getMonth()+1}.${yr})</div>
   </div>
   <table style="border-collapse:collapse;width:100%;">
@@ -1784,7 +1911,7 @@ function buildWochenplanHTML(days,members,schichten,urlaube,forEmail){
     html+='</tr>';
   });
   // Urlaub-Zeile
-  html+=`<tr><td style="padding:8px 6px;border:1px solid #cbd5e1;background:#d1fae5;color:#065f46;font-weight:800;font-size:11px;text-align:center;border-right:3px solid #10b981;">🏖 Urlaub</td>`;
+  html+=`<tr><td style="padding:8px 6px;border:1px solid #cbd5e1;background:#d1fae5;color:#065f46;font-weight:800;font-size:11px;text-align:center;border-right:3px solid #10b981;">Urlaub</td>`;
   days.forEach(d=>{
     const ds=d.toISOString().split('T')[0];
     const uMA=(members||[]).filter(m=>urlaube.some(u=>u.name===`${m.vn} ${m.nn}`&&ds>=u.von&&ds<=u.bis));
@@ -1793,7 +1920,7 @@ function buildWochenplanHTML(days,members,schichten,urlaube,forEmail){
   });
   html+=`</tr></tbody></table>
   <div style="background:#1e293b;color:#94a3b8;padding:8px 20px;font-size:10px;text-align:right;border-radius:0 0 8px 8px;">
-    Arbeitsplan Manager v16.0 · J.Elkaame · ElKaame.Ji@gmx.de
+    Arbeitsplan Manager v16.0 · J. Elkaame · yo.mc@gmx.de
   </div></body></html>`;
   return html;
 }
@@ -1808,7 +1935,7 @@ function downloadWochenplan(){
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');a.href=url;a.download='Wocheneinsatzplan_'+kw+'.html';document.body.appendChild(a);a.click();
   setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},400);
-  toast('Wocheneinsatzplan gespeichert ✓ 📅');
+  toast('Wocheneinsatzplan gespeichert  ');
 }
 function emailWochenplan(){
   const kwVal=document.getElementById('wochenplanKW').value;
@@ -1817,9 +1944,9 @@ function emailWochenplan(){
   const kw=kwVal.replace('-W','_KW');
   setTimeout(()=>{
     const subject=encodeURIComponent('Wocheneinsatzplan '+kw+' – '+CA);
-    const body=encodeURIComponent('Hallo,\n\nbitte finde den Wocheneinsatzplan im Anhang (gespeicherte HTML-Datei: Wocheneinsatzplan_'+kw+'.html).\n\nBereich: '+CA+'\n\nArbeitsplan Manager v16.0 · ElKaame.Ji@gmx.de');
+    const body=encodeURIComponent('Hallo,\n\nbitte finde den Wocheneinsatzplan im Anhang (gespeicherte HTML-Datei: Wocheneinsatzplan_'+kw+'.html).\n\nBereich: '+CA+'\n\nArbeitsplan Manager v16.0 · yo.mc@gmx.de');
     window.location.href='mailto:?subject='+subject+'&body='+body;
-    toast('Datei gespeichert + Email geöffnet 📧');
+    toast('Datei gespeichert + Email geöffnet E-Mail');
   },700);
 }
 // ── NAME HISTORY AUTOCOMPLETE ──
@@ -1843,14 +1970,12 @@ function updateNameHistory(){
 (function(){
   // Theme beim Start laden
   const t=localStorage.getItem('apm_theme')||'dark';
-  if(t==='light'){document.documentElement.setAttribute('data-theme','light');const b=document.getElementById('themeBtn');if(b)b.textContent='☀️';}
+  if(t==='light'){document.documentElement.setAttribute('data-theme','light');const b=document.getElementById('themeBtn');if(b)b.textContent='Dunkel';}
   initRzRows();
-  // Welcome oder direkt zum Login
-  if(LG('welcomed')==='1'){
-    document.getElementById('welcomeOverlay').classList.add('hidden');
-    document.getElementById('loginOverlay').classList.remove('hidden');
-    renderAccList();
-  }
+  // Landing-Page immer zuerst anzeigen
+  document.getElementById('welcomeOverlay').classList.remove('hidden');
+  document.getElementById('loginOverlay').classList.add('hidden');
+  renderAccList();
   // Schichtplan-Tab
   const spTab=document.querySelector('[data-tab=schichtplan]');
   if(spTab)spTab.addEventListener('click',()=>{
@@ -1862,16 +1987,16 @@ function updateNameHistory(){
 })();
 function setStatMode(m,btn){CSMODE=m;document.querySelectorAll('.sf-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');document.getElementById('statWocheInput').style.display=m==='woche'?'block':'none';document.getElementById('statMonatInput').style.display=m==='monat'?'block':'none';}
 function getWeekDates(wv){const[yr,wk]=wv.split('-W').map(Number),j4=new Date(yr,0,4),s=new Date(j4);s.setDate(j4.getDate()-(j4.getDay()||7)+1+(wk-1)*7);const e=new Date(s);e.setDate(s.getDate()+6);return{start:s,end:e};}
-function updateStatistik(){const el=document.getElementById('statistikResult');let schichten=L('schichten'),leistungen=L('leistungen'),label='',fs,fl;if(CSMODE==='woche'){const wv=document.getElementById('statWoche').value;if(!wv){toast('Woche auswählen.','err');return;}const{start,end}=getWeekDates(wv);label=`KW ${wv.split('-W')[1]} / ${wv.split('-W')[0]}`;fs=schichten.filter(s=>{const d=new Date(s.datum+'T00:00:00');return d>=start&&d<=end;});fl=leistungen.filter(l=>{const d=new Date(l.datum+'T00:00:00');return d>=start&&d<=end;});}else{const mv=document.getElementById('statMonat').value;if(!mv){toast('Monat auswählen.','err');return;}const[y,m]=mv.split('-').map(Number);label=new Date(y,m-1,1).toLocaleDateString('de-DE',{month:'long',year:'numeric'});fs=schichten.filter(s=>{const[sy,sm]=s.datum.split('-').map(Number);return sy===y&&sm===m;});fl=leistungen.filter(l=>{const[ly,lm]=l.datum.split('-').map(Number);return ly===y&&lm===m;});}const types=['Früh','Spät','Nacht'],tE={Früh:'🌅',Spät:'🌆',Nacht:'🌙'},tB={Früh:'by',Spät:'bo',Nacht:'bp'};const sCards=types.map(t=>{const ts=fs.filter(s=>s.schichtTyp===t);if(!ts.length)return'';const tn=ts.reduce((s,x)=>s+(x.netto!=null?x.netto:cnm(x.von,x.bis,x.pause||0)),0);const ap=ts.length?Math.round(ts.reduce((s,x)=>s+(x.personen?x.personen.length:0),0)/ts.length):0;const tl=fl.filter(l=>l.schichtTyp===t),av=tl.length&&tl.some(l=>l.gp!=null)?Math.round(tl.filter(l=>l.gp!=null).reduce((s,l)=>s+l.gp,0)/tl.filter(l=>l.gp!=null).length):null;const pc=av===null?null:av>=100?'var(--gr)':av>=75?'var(--or)':'var(--re)';return`<div class="card" style="border-left:3px solid ${t==='Früh'?'var(--ye)':t==='Spät'?'var(--or)':'var(--ac2)'}"><div class="card-title">${tE[t]} ${t}schicht <span class="badge ${tB[t]}">${ts.length}×</span></div><div class="rgrid"><div class="ri"><div class="v vb">${fm(tn)}</div><div class="l">Netto-Std.</div></div><div class="ri"><div class="v vt">${ap}</div><div class="l">Ø Mitarbeiter</div></div>${av!==null?`<div class="ri" style="grid-column:span 2;"><div class="v" style="color:${pc}">${av}%</div><div class="l">Ø Leistung</div><div class="pb-wrap" style="margin-top:6px;"><div class="pb" style="background:${pc};width:${Math.min(av,100)}%"></div></div></div>`:''}</div></div>`;}).join('');
+function updateStatistik(){const el=document.getElementById('statistikResult');let schichten=L('schichten'),leistungen=L('leistungen'),label='',fs,fl;if(CSMODE==='woche'){const wv=document.getElementById('statWoche').value;if(!wv){toast('Woche auswählen.','err');return;}const{start,end}=getWeekDates(wv);label=`KW ${wv.split('-W')[1]} / ${wv.split('-W')[0]}`;fs=schichten.filter(s=>{const d=new Date(s.datum+'T00:00:00');return d>=start&&d<=end;});fl=leistungen.filter(l=>{const d=new Date(l.datum+'T00:00:00');return d>=start&&d<=end;});}else{const mv=document.getElementById('statMonat').value;if(!mv){toast('Monat auswählen.','err');return;}const[y,m]=mv.split('-').map(Number);label=new Date(y,m-1,1).toLocaleDateString('de-DE',{month:'long',year:'numeric'});fs=schichten.filter(s=>{const[sy,sm]=s.datum.split('-').map(Number);return sy===y&&sm===m;});fl=leistungen.filter(l=>{const[ly,lm]=l.datum.split('-').map(Number);return ly===y&&lm===m;});}const types=['Früh','Spät','Nacht'],tE={Früh:'',Spät:'',Nacht:''},tB={Früh:'by',Spät:'bo',Nacht:'bp'};const sCards=types.map(t=>{const ts=fs.filter(s=>s.schichtTyp===t);if(!ts.length)return'';const tn=ts.reduce((s,x)=>s+(x.netto!=null?x.netto:cnm(x.von,x.bis,x.pause||0)),0);const ap=ts.length?Math.round(ts.reduce((s,x)=>s+(x.personen?x.personen.length:0),0)/ts.length):0;const tl=fl.filter(l=>l.schichtTyp===t),av=tl.length&&tl.some(l=>l.gp!=null)?Math.round(tl.filter(l=>l.gp!=null).reduce((s,l)=>s+l.gp,0)/tl.filter(l=>l.gp!=null).length):null;const pc=av===null?null:av>=100?'var(--gr)':av>=75?'var(--or)':'var(--re)';return`<div class="card" style="border-left:3px solid ${t==='Früh'?'var(--ye)':t==='Spät'?'var(--or)':'var(--ac2)'}"><div class="card-title">${tE[t]} ${t}schicht <span class="badge ${tB[t]}">${ts.length}×</span></div><div class="rgrid"><div class="ri"><div class="v vb">${fm(tn)}</div><div class="l">Netto-Std.</div></div><div class="ri"><div class="v vt">${ap}</div><div class="l">Ø Mitarbeiter</div></div>${av!==null?`<div class="ri" style="grid-column:span 2;"><div class="v" style="color:${pc}">${av}%</div><div class="l">Ø Leistung</div><div class="pb-wrap" style="margin-top:6px;"><div class="pb" style="background:${pc};width:${Math.min(av,100)}%"></div></div></div>`:''}</div></div>`;}).join('');
 // Mitarbeiter-Leistung
 const bp={};fs.forEach(s=>(s.personen||[]).forEach(n=>{if(!bp[n])bp[n]={schichten:0,nM:0,lE:[]};bp[n].schichten++;bp[n].nM+=s.netto!=null?s.netto:cnm(s.von,s.bis,s.pause||0);}));L('leistungen').slice(0,50).forEach(l=>l.personen.forEach(p=>{if(!bp[p.name])bp[p.name]={schichten:0,nM:0,lE:[]};const pp=l.ziel>0?Math.round(p.stueck/l.ziel*100):null;if(pp!=null)bp[p.name].lE.push(pp);}));
 // Top-Leistungsträger ermitteln
 const memberEntries=Object.entries(bp).sort((a,b)=>b[1].nM-a[1].nM);
-const memberRows=memberEntries.map(([n,d])=>{const avgL=d.lE.length?Math.round(d.lE.reduce((s,v)=>s+v,0)/d.lE.length):null,lC=avgL===null?null:avgL>=100?'var(--gr)':avgL>=75?'var(--or)':'var(--re)';const ueM=d.nM-d.schichten*8*60;return`<div class="li" style="flex-direction:column;align-items:flex-start;gap:6px;"><div style="display:flex;justify-content:space-between;width:100%;align-items:center;"><div style="font-weight:700;font-size:13px;">👤 ${n}</div><div style="display:flex;gap:5px;align-items:center;"><span class="badge bb">${d.schichten} Schicht${d.schichten!==1?'en':''}</span>${avgL!==null?`<span class="badge" style="background:${lC}22;color:${lC}">${avgL}%</span>`:''}</div></div><div style="display:flex;gap:8px;flex-wrap:wrap;width:100%;"><div class="ri" style="flex:1;min-width:75px;"><div class="v vb" style="font-size:13px;">${fm(d.nM)}</div><div class="l">Arbeitszeit</div></div><div class="ri" style="flex:1;min-width:75px;"><div class="v" style="font-size:13px;color:${ueM>=0?'var(--gr)':'var(--re)'}">${ueM>=0?'+':''}${fm(ueM)}</div><div class="l">Überstunden</div></div>${avgL!==null?`<div class="ri" style="flex:1;min-width:75px;"><div class="v" style="font-size:13px;color:${lC}">${avgL}%</div><div class="l">Ø Leistung</div></div>`:''}</div>${avgL!==null?`<div class="pb-wrap" style="width:100%;"><div class="pb" style="background:${lC};width:${Math.min(avgL,100)}%"></div></div>`:''}</div>`;}).join('');
+const memberRows=memberEntries.map(([n,d])=>{const avgL=d.lE.length?Math.round(d.lE.reduce((s,v)=>s+v,0)/d.lE.length):null,lC=avgL===null?null:avgL>=100?'var(--gr)':avgL>=75?'var(--or)':'var(--re)';const ueM=d.nM-d.schichten*8*60;return`<div class="li" style="flex-direction:column;align-items:flex-start;gap:6px;"><div style="display:flex;justify-content:space-between;width:100%;align-items:center;"><div style="font-weight:700;font-size:13px;"> ${n}</div><div style="display:flex;gap:5px;align-items:center;"><span class="badge bb">${d.schichten} Schicht${d.schichten!==1?'en':''}</span>${avgL!==null?`<span class="badge" style="background:${lC}22;color:${lC}">${avgL}%</span>`:''}</div></div><div style="display:flex;gap:8px;flex-wrap:wrap;width:100%;"><div class="ri" style="flex:1;min-width:75px;"><div class="v vb" style="font-size:13px;">${fm(d.nM)}</div><div class="l">Arbeitszeit</div></div><div class="ri" style="flex:1;min-width:75px;"><div class="v" style="font-size:13px;color:${ueM>=0?'var(--gr)':'var(--re)'}">${ueM>=0?'+':''}${fm(ueM)}</div><div class="l">Überstunden</div></div>${avgL!==null?`<div class="ri" style="flex:1;min-width:75px;"><div class="v" style="font-size:13px;color:${lC}">${avgL}%</div><div class="l">Ø Leistung</div></div>`:''}</div>${avgL!==null?`<div class="pb-wrap" style="width:100%;"><div class="pb" style="background:${lC};width:${Math.min(avgL,100)}%"></div></div>`:''}</div>`;}).join('');
 const tS=fs.length,tN=fs.reduce((s,x)=>s+(x.netto!=null?x.netto:cnm(x.von,x.bis,x.pause||0)),0);
 // Bester Mitarbeiter
 let bestMA='';const withL=memberEntries.filter(([n,d])=>d.lE.length>0);if(withL.length){const sorted=withL.sort((a,b)=>{const la=Math.round(a[1].lE.reduce((s,v)=>s+v,0)/a[1].lE.length);const lb=Math.round(b[1].lE.reduce((s,v)=>s+v,0)/b[1].lE.length);return lb-la;});const topVal=Math.round(sorted[0][1].lE.reduce((s,v)=>s+v,0)/sorted[0][1].lE.length);const tied=sorted.filter(([n,d])=>Math.round(d.lE.reduce((s,v)=>s+v,0)/d.lE.length)===topVal);bestMA=tied.length>1?`${tied.map(t=>t[0]).join(', ')} (alle ${topVal}%)`:sorted[0][0]+' ('+topVal+'%)';}
-el.innerHTML=`<div class="card"><div class="card-title">📊 Übersicht – ${label}</div><div class="rgrid"><div class="ri"><div class="v vb">${tS}</div><div class="l">Schichten ges.</div></div><div class="ri"><div class="v vt">${fm(tN)}</div><div class="l">Netto-Std.</div></div><div class="ri"><div class="v vg">${fs.filter(s=>s.schichtTyp==='Früh').length}</div><div class="l">🌅 Früh</div></div><div class="ri"><div class="v vo">${fs.filter(s=>s.schichtTyp==='Spät').length}</div><div class="l">🌆 Spät</div></div><div class="ri" style="grid-column:span 2;"><div class="v vp">${fs.filter(s=>s.schichtTyp==='Nacht').length}</div><div class="l">🌙 Nacht</div></div></div>${bestMA?`<div style="margin-top:10px;background:rgba(41,199,138,.08);border:1px solid rgba(41,199,138,.25);border-radius:var(--rs);padding:10px;font-size:12px;"><span style="color:var(--gr);font-weight:700;">🏆 Höchste Leistung: </span>${bestMA}</div>`:''}</div>${sCards||'<div class="empty"><div class="icon">📅</div>Keine Schichten.</div>'}${memberRows?`<div class="card"><div class="card-title">👤 Mitarbeiter-Übersicht</div><div style="display:flex;flex-direction:column;gap:8px;">${memberRows}</div></div>`:''}`;renderRetCharts();}
+el.innerHTML=`<div class="card"><div class="card-title">Übersicht – ${label}</div><div class="rgrid"><div class="ri"><div class="v vb">${tS}</div><div class="l">Schichten ges.</div></div><div class="ri"><div class="v vt">${fm(tN)}</div><div class="l">Netto-Std.</div></div><div class="ri"><div class="v vg">${fs.filter(s=>s.schichtTyp==='Früh').length}</div><div class="l">Früh</div></div><div class="ri"><div class="v vo">${fs.filter(s=>s.schichtTyp==='Spät').length}</div><div class="l">Spät</div></div><div class="ri" style="grid-column:span 2;"><div class="v vp">${fs.filter(s=>s.schichtTyp==='Nacht').length}</div><div class="l">Nacht</div></div></div>${bestMA?`<div style="margin-top:10px;background:rgba(41,199,138,.08);border:1px solid rgba(41,199,138,.25);border-radius:var(--rs);padding:10px;font-size:12px;"><span style="color:var(--gr);font-weight:700;">Höchste Leistung: </span>${bestMA}</div>`:''}</div>${sCards||'<div class="empty"><div class="icon"></div>Keine Schichten.</div>'}${memberRows?`<div class="card"><div class="card-title"> Mitarbeiter-Übersicht</div><div style="display:flex;flex-direction:column;gap:8px;">${memberRows}</div></div>`:''}`;renderRetCharts();}
 
 // ── NEUE STATISTIK-CHARTS: LINIENDIAGRAMM VERLAUF ──
 let chartModeAkt='tag';
@@ -1960,8 +2085,8 @@ function renderVerlaufChart(){
   if(chartVP)chartVP.destroy();
   chartVP=new Chart(ctx2.getContext('2d'),{type:'bar',data:{labels,datasets:[
     {label:'Produziert',data:prodData,backgroundColor:'rgba(61,142,240,.5)',borderColor:'#3d8ef0',borderWidth:1},
-    {label:'🔧 Nachbesserung',data:repData,backgroundColor:'rgba(245,166,35,.7)',borderColor:'#f5a623',borderWidth:1},
-    {label:'💀 Defekt',data:kapData,backgroundColor:'rgba(240,80,110,.7)',borderColor:'#f0506e',borderWidth:1}
+    {label:'Nachbesserung',data:repData,backgroundColor:'rgba(245,166,35,.7)',borderColor:'#f5a623',borderWidth:1},
+    {label:' Defekt',data:kapData,backgroundColor:'rgba(240,80,110,.7)',borderColor:'#f0506e',borderWidth:1}
   ]},options:{...chartOpts}});
 }
 
@@ -1972,10 +2097,10 @@ function renderRetCharts(){updateChartProdFilter();renderVerlaufChart();}
 function doSendEmail(){
   const now=new Date().toLocaleDateString('de-DE');
   const subject=encodeURIComponent('APM Wochenbericht – '+CA+' – '+now);
-  const body=encodeURIComponent('Hallo,\n\nbitte finde den Wochenbericht im Anhang.\n\nBereich: '+CA+'\nErstellt: '+now+'\n\nArbeitsplan Manager v16.0 · ElKaame.Ji@gmx.de');
+  const body=encodeURIComponent('Hallo,\n\nbitte finde den Wochenbericht im Anhang.\n\nBereich: '+CA+'\nErstellt: '+now+'\n\nArbeitsplan Manager v16.0 · yo.mc@gmx.de');
   const link=document.createElement('a');link.href='mailto:?subject='+subject+'&body='+body;link.style.display='none';
   document.body.appendChild(link);link.click();document.body.removeChild(link);
-  toast('Email-App geöffnet 📧');
+  toast('Email-App geöffnet E-Mail');
 }
 
 
@@ -2006,7 +2131,7 @@ function berichtAlsDateiSpeichern(){
   document.body.appendChild(a);
   a.click();
   setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},1000);
-  toast('Bericht gespeichert – Im Downloads-Ordner suchen 📁');
+  toast('Bericht gespeichert – Im Downloads-Ordner suchen ');
 }
 
 function wochenplanImBrowserOeffnen(){
@@ -2102,7 +2227,7 @@ function erstelleBerichtHTML(){
       <td style="text-align:center;">${(r.vers||0).toLocaleString('de-DE')}</td>
       <td style="text-align:center;">${(r.zurueck||0).toLocaleString('de-DE')}</td>
       <td style="text-align:center;font-weight:700;color:${col};">${r.rekPct}%</td>
-      <td style="text-align:center;color:${pct<3?'#16a34a':'#dc2626'};font-size:14px;">${pct<3?'🟢':pct<8?'🟡':'🔴'}</td>
+      <td style="text-align:center;color:${pct<3?'#16a34a':'#dc2626'};font-size:14px;">${pct<3?'●':pct<8?'●':'●'}</td>
       <td style="text-align:center;font-weight:700;color:${(r.offen||0)>0?'#dc2626':'#16a34a'}">${r.offen||0}</td>
     </tr>`;
   }).join('');
@@ -2146,7 +2271,7 @@ function erstelleBerichtHTML(){
   td{padding:6px 8px;border-bottom:1px solid #f1f5f9;vertical-align:top;}
   tr:last-child td{border-bottom:none;}
   tr:hover td{background:#f8fafc;}
-  .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;}
+  .badge{display:inline-block;padding:2px 8px;border-radius:3px;font-size:10px;font-weight:700;}
   .frueh{background:#fef3c7;color:#92400e;}
   .spaet{background:#fefce8;color:#78640a;}
   .nacht{background:#f3e8ff;color:#6d28d9;}
@@ -2155,32 +2280,32 @@ function erstelleBerichtHTML(){
 </head>
 <body>
 <div class="header">
-  <h1>⚙ WOCHENBERICHT – ARBEITSPLAN MANAGER</h1>
+  <h1> WOCHENBERICHT – ARBEITSPLAN MANAGER</h1>
   <p>Abteilung: ${accName} &nbsp;|&nbsp; Bereich: ${CA} &nbsp;|&nbsp; Zeitraum: ${zeitraumLabel}</p>
-  <p style="margin-top:4px;">Erstellt: ${nowStr}, ${nowTime} &nbsp;|&nbsp; v16.0 · J.Elkaame</p>
+  <p style="margin-top:4px;">Erstellt: ${nowStr}, ${nowTime} &nbsp;|&nbsp; v16.0 · J. Elkaame</p>
 </div>
 
-<button class="print-btn" onclick="window.print()">🖨️ Drucken / Als PDF speichern</button>
+<button class="print-btn" onclick="window.print()"> Drucken / Als PDF speichern</button>
 
 <div class="body">
 
   <!-- KPI ÜBERSICHT -->
   <div class="section">
-    <div class="section-hdr">📊 Übersicht</div>
+    <div class="section-hdr">Übersicht</div>
     <div class="kpi-grid">
       <div class="kpi"><div class="v">${schichten.length}</div><div class="l">Schichten</div></div>
-      <div class="kpi"><div class="v" style="color:#d97706;">${frueh.length}</div><div class="l">🌅 Früh</div></div>
-      <div class="kpi"><div class="v" style="color:#78640a;">${spaet.length}</div><div class="l">🌆 Spät</div></div>
-      <div class="kpi"><div class="v" style="color:#6d28d9;">${nacht.length}</div><div class="l">🌙 Nacht</div></div>
-      <div class="kpi"><div class="v" style="color:#16a34a;">${alleMA.size}</div><div class="l">👤 Mitarbeiter</div></div>
-      <div class="kpi"><div class="v" style="color:#dc2626;">${urlaube.length}</div><div class="l">🏖 Abwesend</div></div>
+      <div class="kpi"><div class="v" style="color:#d97706;">${frueh.length}</div><div class="l">Früh</div></div>
+      <div class="kpi"><div class="v" style="color:#78640a;">${spaet.length}</div><div class="l">Spät</div></div>
+      <div class="kpi"><div class="v" style="color:#6d28d9;">${nacht.length}</div><div class="l">Nacht</div></div>
+      <div class="kpi"><div class="v" style="color:#16a34a;">${alleMA.size}</div><div class="l"> Mitarbeiter</div></div>
+      <div class="kpi"><div class="v" style="color:#dc2626;">${urlaube.length}</div><div class="l">Abwesend</div></div>
     </div>
   </div>
 
   ${schichtZeilen?`
   <!-- SCHICHTLISTE -->
   <div class="section">
-    <div class="section-hdr">📅 Schichten (${schichten.length})</div>
+    <div class="section-hdr">Schichten (${schichten.length})</div>
     <table>
       <thead><tr><th>Datum</th><th>Typ</th><th>Zeit</th><th>Netto</th><th>Mitarbeiter</th><th>Notiz</th></tr></thead>
       <tbody>${schichtZeilen}</tbody>
@@ -2190,7 +2315,7 @@ function erstelleBerichtHTML(){
   ${maZeilen?`
   <!-- MITARBEITER LEISTUNG -->
   <div class="section">
-    <div class="section-hdr gruen">👤 Mitarbeiter-Übersicht & Leistung</div>
+    <div class="section-hdr gruen"> Mitarbeiter-Übersicht & Leistung</div>
     <table>
       <thead><tr><th>Name</th><th style="text-align:center;">Schichten</th><th style="text-align:center;">Arbeitszeit</th><th style="text-align:center;">Ø Leistung</th></tr></thead>
       <tbody>${Object.entries(maStats).map(([name,d])=>{
@@ -2206,7 +2331,7 @@ function erstelleBerichtHTML(){
   ${leistungen.length?`
   <!-- LEISTUNG PRO SCHICHT -->
   <div class="section">
-    <div class="section-hdr" style="background:#0f4c81;">📊 Leistung der Schichten</div>
+    <div class="section-hdr" style="background:#0f4c81;">Leistung der Schichten</div>
     <table>
       <thead><tr><th>Datum</th><th>Typ</th><th style="text-align:center;">Ges. Stücke</th><th style="text-align:center;">Ges. Leistung</th><th style="text-align:center;">Stk/h</th></tr></thead>
       <tbody>${leistungen.slice(0,20).map(l=>{
@@ -2221,18 +2346,18 @@ function erstelleBerichtHTML(){
   ${retouren.length?`
   <!-- TABELLE 1: PRODUKTION -->
   <div class="section">
-    <div class="section-hdr" style="background:#1e3a5f;">🏭 Tabelle 1 – Produktion & Ausschuss</div>
+    <div class="section-hdr" style="background:#1e3a5f;"> Tabelle 1 – Produktion & Ausschuss</div>
     <table>
       <thead>
         <tr>
           <th>Produkt</th>
           <th>Zeitraum</th>
           <th style="text-align:center;">Produziert</th>
-          <th style="text-align:center;">🔧 Nachbesserung</th>
+          <th style="text-align:center;">Nachbesserung</th>
           <th style="text-align:center;">Nachb.-Quote</th>
-          <th style="text-align:center;">💀 Defekt</th>
+          <th style="text-align:center;"> Defekt</th>
           <th style="text-align:center;">Defekt-Quote</th>
-          <th style="text-align:center;">⚠️ Ges. Ausschuss</th>
+          <th style="text-align:center;">Ges. Ausschuss</th>
           <th>Fehlergrund</th>
         </tr>
       </thead>
@@ -2289,7 +2414,7 @@ function erstelleBerichtHTML(){
 
   <!-- TABELLE 2: VERSAND & RETOUREN -->
   <div class="section">
-    <div class="section-hdr" style="background:#7f1d1d;">↩ Tabelle 2 – Versand & Retouren im Lager</div>
+    <div class="section-hdr" style="background:#7f1d1d;">Tabelle 2 – Versand & Retouren im Lager</div>
     <table>
       <thead>
         <tr>
@@ -2300,13 +2425,13 @@ function erstelleBerichtHTML(){
           <th style="text-align:center;">Rekl.-Quote</th>
           <th style="text-align:center;">Ampel</th>
           <th style="text-align:center;">Tats. im Lager</th>
-          <th style="text-align:center;">🔓 Lager offen</th>
+          <th style="text-align:center;"> Lager offen</th>
         </tr>
       </thead>
       <tbody>${retouren.slice(0,15).map(r=>{
         const pct=parseFloat(r.rekPct)||0;
         const col=pct<3?'#16a34a':pct<8?'#d97706':'#dc2626';
-        const ampel=pct<3?'🟢':pct<8?'🟡':'🔴';
+        const ampel=pct<3?'●':pct<8?'●':'●';
         const hatBearbeitung=r.bearbeitet!=null&&r.bearbeitet>0;
         const lagerOffen=hatBearbeitung?r.offen:'–';
         const lagerCol=hatBearbeitung?(r.offen>0?'#dc2626':'#16a34a'):'#94a3b8';
@@ -2352,7 +2477,7 @@ function erstelleBerichtHTML(){
   ${abwZeilen?`
   <!-- ABWESENHEITEN -->
   <div class="section">
-    <div class="section-hdr rot">🏖 Abwesenheiten / Urlaub / Krank</div>
+    <div class="section-hdr rot">Abwesenheiten / Urlaub / Krank</div>
     <table>
       <thead><tr><th>Name</th><th>Art</th><th>Von</th><th>Bis</th></tr></thead>
       <tbody>${abwZeilen}</tbody>
@@ -2360,7 +2485,7 @@ function erstelleBerichtHTML(){
   </div>`:''}
 
   <div style="text-align:center;padding:16px;font-size:11px;color:#94a3b8;">
-    Arbeitsplan Manager v16.0 · J.Elkaame · ElKaame.Ji@gmx.de
+    Arbeitsplan Manager v16.0 · J. Elkaame · yo.mc@gmx.de
   </div>
 </div>
 </body>
@@ -2375,18 +2500,18 @@ function toggleTheme(){
   const html=document.documentElement;
   const isLight=html.getAttribute('data-theme')==='light';
   html.setAttribute('data-theme',isLight?'dark':'light');
-  const b=document.getElementById('themeBtn');if(b)b.textContent=isLight?'🌙':'☀️';
+  const b=document.getElementById('themeBtn');if(b)b.textContent=isLight?'':'';
   localStorage.setItem('apm_theme',isLight?'dark':'light');
 }
 
 // ── BACKUP ──
 function getAllDataForBackup(){const areas=LG('areas',[]);const data={version:9,account:CK,areas,exportDate:new Date().toISOString(),data:{}};const oldCA=CA;areas.forEach(area=>{CA=area;data.data[area]={members:L('members',[]),schichten:L('schichten',[]),urlaube:L('urlaube',[]),leistungen:L('leistungen',[]),stueckliste:L('stueckliste',[]),retouren_verlauf:L('retouren_verlauf',[]),ret_produkte:L('ret_produkte',['Standard'])};});CA=oldCA;return data;}
-function doBackupExport(){const data=getAllDataForBackup();const json=JSON.stringify(data,null,2);const fn='APM_Backup_v9_'+new Date().toLocaleDateString('de-DE').replace(/\./g,'-')+'.json';const blob=new Blob([json],{type:'application/json;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=fn;document.body.appendChild(a);a.click();setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},400);toast('Backup gespeichert ✓');}
-function doBackupImport(input){const file=input.files[0];if(!file){return;}const reader=new FileReader();reader.onload=function(e){try{const data=JSON.parse(e.target.result);if(!data.data||!data.areas){toast('Ungültige Backup-Datei ❌','err');return;}showConfirm('Backup importieren','Vorhandene Daten werden überschrieben. Fortfahren?','Importieren',()=>{const areas=data.areas;SG('areas',areas);const acc=getAcc();if(acc[CK]){acc[CK].areas=areas;setAcc(acc);}const oldCA=CA;areas.forEach(area=>{if(data.data[area]){CA=area;const d=data.data[area];if(d.members)S('members',d.members);if(d.schichten)S('schichten',d.schichten);if(d.urlaube)S('urlaube',d.urlaube);if(d.leistungen)S('leistungen',d.leistungen);if(d.stueckliste)S('stueckliste',d.stueckliste);if(d.retouren_verlauf)S('retouren_verlauf',d.retouren_verlauf);if(d.ret_produkte)S('ret_produkte',d.ret_produkte);}});CA=oldCA;CA=areas[0];refreshAll(areas);fillAreaSels(areas);renderBackupInfo();toast('Backup importiert ✓ – '+areas.length+' Bereiche geladen');});}catch(err){toast('Fehler beim Importieren ❌','err');}};reader.readAsText(file);input.value='';}
+function doBackupExport(){const data=getAllDataForBackup();const json=JSON.stringify(data,null,2);const fn='APM_Backup_v9_'+new Date().toLocaleDateString('de-DE').replace(/\./g,'-')+'.json';const blob=new Blob([json],{type:'application/json;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=fn;document.body.appendChild(a);a.click();setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},400);toast('Backup gespeichert ');}
+function doBackupImport(input){const file=input.files[0];if(!file){return;}const reader=new FileReader();reader.onload=function(e){try{const data=JSON.parse(e.target.result);if(!data.data||!data.areas){toast('Ungültige Backup-Datei ×','err');return;}showConfirm('Backup importieren','Vorhandene Daten werden überschrieben. Fortfahren?','Importieren',()=>{const areas=data.areas;SG('areas',areas);const acc=getAcc();if(acc[CK]){acc[CK].areas=areas;setAcc(acc);}const oldCA=CA;areas.forEach(area=>{if(data.data[area]){CA=area;const d=data.data[area];if(d.members)S('members',d.members);if(d.schichten)S('schichten',d.schichten);if(d.urlaube)S('urlaube',d.urlaube);if(d.leistungen)S('leistungen',d.leistungen);if(d.stueckliste)S('stueckliste',d.stueckliste);if(d.retouren_verlauf)S('retouren_verlauf',d.retouren_verlauf);if(d.ret_produkte)S('ret_produkte',d.ret_produkte);}});CA=oldCA;CA=areas[0];refreshAll(areas);fillAreaSels(areas);renderBackupInfo();toast('Backup importiert  – '+areas.length+' Bereiche geladen');});}catch(err){toast('Fehler beim Importieren ×','err');}};reader.readAsText(file);input.value='';}
 function renderBackupInfo(){const areas=LG('areas',[]);let counts={};const oldCA=CA;areas.forEach(area=>{CA=area;counts[area]={s:L('schichten',[]).length,m:L('members',[]).length,r:L('retouren_verlauf',[]).length};});CA=oldCA;const lines=areas.map(a=>`<div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--bd);"><span style="font-weight:600;">${a}</span><span style="color:var(--tx2);">${counts[a].m} MA · ${counts[a].s} Schichten · ${counts[a].r} Retouren</span></div>`).join('');document.getElementById('backupInfo').innerHTML=lines||'<div style="font-size:12px;color:var(--tx2);">Keine Bereiche.</div>';}
 
 // ── DATEN LÖSCHEN ──
-function clearBereichData(){showConfirm('⚠️ Bereichsdaten löschen',`Alle Daten für Bereich "${CA}" wirklich löschen? Dies kann NICHT rückgängig gemacht werden! Vorher bitte Backup oder PDF erstellen.`,'Unwiderruflich löschen',()=>{S('schichten',[]);S('urlaube',[]);S('leistungen',[]);S('stueckliste',[]);S('retouren_verlauf',[]);S('ret_produkte',['Standard']);refreshAll();toast('Bereichsdaten gelöscht.','err');});}
+function clearBereichData(){showConfirm('Bereichsdaten löschen',`Alle Daten für Bereich "${CA}" wirklich löschen? Dies kann NICHT rückgängig gemacht werden! Vorher bitte Backup oder PDF erstellen.`,'Unwiderruflich löschen',()=>{S('schichten',[]);S('urlaube',[]);S('leistungen',[]);S('stueckliste',[]);S('retouren_verlauf',[]);S('ret_produkte',['Standard']);refreshAll();toast('Bereichsdaten gelöscht.','err');});}
 </script>
 </body>
 </html>
